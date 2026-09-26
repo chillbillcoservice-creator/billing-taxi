@@ -19,17 +19,51 @@ import {
   Compass,
   Cloud,
   Sun,
+  Activity,
 } from 'lucide-react';
+
+interface WeatherData {
+  windSpeed: number;
+  windGusts: number;
+  temperature: number;
+  humidity: number;
+  windDirection: string;
+  windDegrees: number;
+  condition: string;
+  flightStatus: string;
+  statusBadge: string;
+  statusColor: 'emerald' | 'amber' | 'rose' | 'sky';
+  updatedAt: string;
+}
 
 export default function HomePage() {
   const { user } = useAuth();
   const [trips, setTrips] = useState<TaxiTripInfo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
   const [filterLocation, setFilterLocation] = useState('ALL');
   const [filterSeats, setFilterSeats] = useState('');
   const [selectedTripForJoin, setSelectedTripForJoin] = useState<TaxiTripInfo | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const fetchWeather = async () => {
+    try {
+      const res = await fetch('/api/weather');
+      const json = await res.json();
+      if (json.data) {
+        setWeather(json.data);
+      }
+    } catch (err) {
+      console.error('Failed to load live weather', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchWeather();
+    const interval = setInterval(fetchWeather, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const fetchTodayTrips = async () => {
     setLoading(true);
@@ -117,8 +151,16 @@ export default function HomePage() {
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
             Bir-Billing Launch Telemetry
           </span>
-          <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold border border-emerald-500/40 shadow-sm shrink-0">
-            FLYABLE 🟢
+          <span className={`text-xs px-2.5 py-1 rounded-full font-extrabold border shadow-sm shrink-0 transition-colors ${
+            weather?.statusColor === 'rose'
+              ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+              : weather?.statusColor === 'amber'
+              ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+              : weather?.statusColor === 'sky'
+              ? 'bg-sky-500/20 text-sky-300 border-sky-500/40'
+              : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+          }`}>
+            {weather ? weather.statusBadge : 'LIVE DATA 🟢'}
           </span>
         </div>
 
@@ -135,22 +177,34 @@ export default function HomePage() {
             <span className="text-[10px] sm:text-xs text-slate-300 font-bold tracking-wider mb-0.5 sm:mb-1 flex items-center gap-1">
               <Wind className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-sky-400 shrink-0" /> WIND
             </span>
-            <span className="text-xs sm:text-base font-black text-sky-300 truncate w-full">12-14 km/h</span>
-            <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate w-full">SW Breeze</span>
+            <span className="text-xs sm:text-base font-black text-sky-300 truncate w-full">
+              {weather ? `${weather.windSpeed} km/h` : '...'}
+            </span>
+            <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate w-full">
+              {weather ? `${weather.windDirection} (${weather.windDegrees}°)` : 'Live Wind'}
+            </span>
           </div>
           <div className="border-x border-slate-800 flex flex-col items-center min-w-0 px-1">
             <span className="text-[10px] sm:text-xs text-slate-300 font-bold tracking-wider mb-0.5 sm:mb-1 flex items-center gap-1">
-              <Cloud className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400 shrink-0" /> BASE
+              <Activity className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400 shrink-0" /> GUSTS
             </span>
-            <span className="text-xs sm:text-base font-black text-amber-400 truncate w-full">3,800m</span>
-            <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate w-full">High Ceiling</span>
+            <span className="text-xs sm:text-base font-black text-amber-400 truncate w-full">
+              {weather ? `${weather.windGusts} km/h` : '...'}
+            </span>
+            <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate w-full">
+              {weather ? (weather.windGusts > 25 ? 'Strong Peak' : 'Peak Gust') : 'Mountain Peak'}
+            </span>
           </div>
           <div className="flex flex-col items-center min-w-0">
             <span className="text-[10px] sm:text-xs text-slate-300 font-bold tracking-wider mb-0.5 sm:mb-1 flex items-center gap-1">
               <Sun className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400 shrink-0" /> TEMP
             </span>
-            <span className="text-xs sm:text-base font-black text-emerald-400 truncate w-full">18°C</span>
-            <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate w-full">Sunny</span>
+            <span className="text-xs sm:text-base font-black text-emerald-400 truncate w-full">
+              {weather ? `${weather.temperature}°C` : '...'}
+            </span>
+            <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate w-full">
+              {weather ? weather.condition : 'Billing 2,430m'}
+            </span>
           </div>
         </div>
       </div>
