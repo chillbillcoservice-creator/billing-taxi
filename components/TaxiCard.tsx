@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { TaxiTripInfo, UserSummary } from '@/lib/types';
-import { Clock, MapPin, Users, Phone, ShieldCheck, CheckCircle2, AlertCircle, XCircle } from 'lucide-react';
+import { Clock, MapPin, Users, Phone, ShieldCheck, CheckCircle2, AlertCircle, XCircle, ChevronRight } from 'lucide-react';
 
 interface TaxiCardProps {
   trip: TaxiTripInfo;
@@ -182,6 +183,20 @@ export default function TaxiCard({
           "{trip.notes}"
         </p>
       )}
+
+      {/* View Passengers & Details Link */}
+      <div className="mb-3 flex items-center justify-between text-xs pt-1">
+        <Link
+          href={`/taxis/${trip.id}`}
+          className="text-sky-400 hover:text-sky-300 font-bold flex items-center gap-1 hover:underline transition-colors"
+        >
+          <span>View Passengers & Details</span>
+          <ChevronRight className="w-3.5 h-3.5" />
+        </Link>
+        <span className="text-slate-400 text-[11px] font-medium">
+          {trip.bookings?.length || 0} booked
+        </span>
+      </div>
 
       {/* Action Buttons */}
       <div className="pt-2.5 border-t border-slate-800/80 flex items-center justify-between gap-2.5 flex-wrap">
