@@ -54,6 +54,17 @@ export default function NotificationsPage() {
     return <Bell className="w-4 h-4 text-slate-400" />;
   };
 
+  const resolveNotificationLink = (link?: string | null) => {
+    if (!link) return '/';
+    if (link.startsWith('/permissions/applications') || link.startsWith('/permissions/permits')) {
+      return '/permissions';
+    }
+    if (link.startsWith('/admin/applications')) {
+      return '/admin';
+    }
+    return link;
+  };
+
   return (
     <div className="flex-1 flex flex-col p-4 space-y-4">
       <div className="flex items-center justify-between">
@@ -87,7 +98,7 @@ export default function NotificationsPage() {
           {notifications.map((n) => (
             <Link
               key={n.id}
-              href={n.link || '/'}
+              href={resolveNotificationLink(n.link)}
               className={`p-3.5 rounded-2xl border transition-all flex items-start gap-3 block ${
                 n.isRead
                   ? 'bg-slate-900/60 border-slate-800 text-slate-400'
