@@ -1,0 +1,243 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                 String    @id @default(cuid())
+  name               String
+  username           String    @unique
+  phone              String    @unique
+  email              String?   @unique
+  passwordHash       String
+  avatarUrl          String?
+  bio                String?
+  role               String    @default("MEMBER") // MEMBER, PARTNER, MODERATOR, ADMIN
+  status             String    @default("ACTIVE") // ACTIVE, SUSPENDED, BANNED
+  pilotGlider        String?
+  pilotLicenseNumber String?
+  isPilotVerified    Boolean   @default(false)
+  mutedUntil         DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relations
+  hostedTrips         TaxiTrip[]           @relation("HostedTrips")
+  bookings            TaxiBooking[]
+  chatMessages        ChatMessage[]
+  chatReports         ChatReport[]         @relation("Reporter")
+  lostFoundItems      LostFoundItem[]
+  marketplaceListings MarketplaceListing[]
+  partnerApplications PartnerApplication[]
+  permits             Permit[]             @relation("PartnerPermits")
+  issuedPermits       Permit[]             @relation("AdminIssuedPermits")
+  notifications       Notification[]
+  auditLogs           AuditLog[]           @relation("AdminAudit")
+}
+
+model TaxiTrip {
+  id             String        @id @default(cuid())
+  hostId         String
+  pickupLocation String
+  destination    String        @default("Billing Take-Off (2400m)")
+  tripDate       DateTime
+  pickupTime     String
+  totalSeats     Int
+  availableSeats Int
+  farePerSeat    Float
+  driverName     String
+  driverPhone    String
+  vehicleNumber  String?
+  vehicleType    String?
+  notes          String?
+  status         String        @default("OPEN") // OPEN, ALMOST_FULL, FULL, COMPLETED, CANCELLED
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  host     User          @relation("HostedTrips", fields: [hostId], references: [id], onDelete: Cascade)
+  bookings TaxiBooking[]
+
+  @@index([tripDate, status])
+}
+
+model TaxiBooking {
+  id             String   @id @default(cuid())
+  tripId         String
+  userId         String
+  passengerCount Int      @default(1)
+  contactPhone   String
+  status         String   @default("CONFIRMED") // CONFIRMED, CANCELLED
+  bookedAt       DateTime @default(now())
+
+  trip TaxiTrip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tripId, userId])
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  senderId  String
+  content   String
+  mediaUrl  String?
+  mediaType String   @default("NONE") // NONE, IMAGE, VIDEO
+  replyToId String?
+  isPinned  Boolean  @default(false)
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  sender  User          @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  replyTo ChatMessage?  @relation("ThreadReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies ChatMessage[] @relation("ThreadReplies")
+  reports ChatReport[]
+
+  @@index([createdAt])
+}
+
+model ChatReport {
+  id         String   @id @default(cuid())
+  messageId  String
+  reporterId String
+  reason     String
+  status     String   @default("PENDING") // PENDING, REVIEWED, DISMISSED
+  createdAt  DateTime @default(now())
+
+  message  ChatMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  reporter User        @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+}
+
+model LostFoundItem {
+  id           String   @id @default(cuid())
+  userId       String
+  type         String // LOST, FOUND
+  title        String
+  category     String // WING, HARNESS, RESERVE, HELMET, INSTRUMENTS, CAMERA, RADIO, CLOTHING, OTHER
+  description  String
+  photos       String   @default("[]") // JSON string of photo URLs
+  itemDate     DateTime
+  location     String
+  contactPhone String
+  status       String   @default("OPEN") // OPEN, CLAIMED, RESOLVED
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([type, status])
+}
+
+model MarketplaceListing {
+  id           String   @id @default(cuid())
+  sellerId     String
+  title        String
+  category     String // PARAGLIDER, HARNESS, RESERVE, HELMET, INSTRUMENTS, CLOTHING, ACCESSORIES, OTHER
+  description  String
+  condition    String // NEW, EXCELLENT, GOOD, FAIR
+  price        Float
+  location     String
+  photos       String   @default("[]") // JSON string of photo URLs
+  status       String   @default("AVAILABLE") // AVAILABLE, RESERVED, SOLD
+  contactPhone String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  seller User @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+
+  @@index([category, status])
+}
+
+model PartnerApplication {
+  id                  String    @id @default(cuid())
+  partnerId           String
+  companyName         String
+  contactPerson       String
+  businessType        String // TANDEM_AGENCY, PARAGLIDING_SCHOOL, CAMPING_RESORT, EQUIPMENT_IMPORTER, OTHER
+  registrationNumber  String
+  address             String
+  pilotCount          Int       @default(1)
+  insurancePolicyNo   String
+  status              String    @default("DRAFT") // DRAFT, SUBMITTED, UNDER_REVIEW, CHANGES_REQUIRED, APPROVED, REJECTED, EXPIRED
+  adminNotes          String?
+  changeRequestReason String?
+  submittedAt         DateTime?
+  reviewedAt          DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  partner   User              @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  documents PartnerDocument[]
+  permit    Permit?
+
+  @@index([status])
+}
+
+model PartnerDocument {
+  id            String   @id @default(cuid())
+  applicationId String
+  docType       String // PILOT_LICENSE, EQUIPMENT_INSPECTION, TOURISM_REGISTRATION, INSURANCE_CERTIFICATE, IDENTITY_PROOF, OTHER
+  title         String
+  fileUrl       String
+  fileSize      Int      @default(0)
+  mimeType      String   @default("application/octet-stream")
+  createdAt     DateTime @default(now())
+
+  application PartnerApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+}
+
+model Permit {
+  id              String   @id @default(cuid())
+  permitNumber    String   @unique
+  applicationId   String   @unique
+  partnerId       String
+  issuedDate      DateTime @default(now())
+  expiryDate      DateTime
+  scope           String // COMMERCIAL_TANDEM_OPERATIONS, SCHOOL_INSTRUCTION, SOLO_PILOT_RETRIEVAL, FACILITY_ACCESS
+  qrCodeData      String
+  status          String   @default("VALID") // VALID, REVOKED, EXPIRED
+  issuedByAdminId String
+  createdAt       DateTime @default(now())
+
+  application PartnerApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  partner     User               @relation("PartnerPermits", fields: [partnerId], references: [id], onDelete: Cascade)
+  issuedBy    User               @relation("AdminIssuedPermits", fields: [issuedByAdminId], references: [id])
+
+  @@index([permitNumber])
+  @@index([status])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  message   String
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  adminId    String
+  action     String
+  targetType String
+  targetId   String
+  details    String
+  createdAt  DateTime @default(now())
+
+  admin User @relation("AdminAudit", fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+}

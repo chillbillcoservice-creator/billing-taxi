@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="100%" height="100%">
+  <rect width="600" height="400" fill="#0f172a" />
+  <!-- Radio Antenna -->
+  <line x1="260" y1="50" x2="260" y2="120" stroke="#f59e0b" stroke-width="8" stroke-linecap="round" />
+  <!-- Radio Body -->
+  <rect x="230" y="120" width="140" height="210" rx="16" fill="#1e293b" stroke="#f59e0b" stroke-width="3" />
+  <!-- Radio Screen -->
+  <rect x="245" y="145" width="110" height="60" rx="6" fill="#fef08a" stroke="#ca8a04" stroke-width="2" />
+  <text x="300" y="180" font-family="monospace" font-size="20" font-weight="900" fill="#713f12" text-anchor="middle">144.500</text>
+  <!-- Keypad dots -->
+  <circle cx="265" cy="235" r="8" fill="#475569" />
+  <circle cx="300" cy="235" r="8" fill="#475569" />
+  <circle cx="335" cy="235" r="8" fill="#475569" />
+  <circle cx="265" cy="265" r="8" fill="#475569" />
+  <circle cx="300" cy="265" r="8" fill="#475569" />
+  <circle cx="335" cy="265" r="8" fill="#475569" />
+  <text x="300" y="370" font-family="system-ui, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="middle">BAOFENG DUAL-BAND RADIO</text>
+</svg>

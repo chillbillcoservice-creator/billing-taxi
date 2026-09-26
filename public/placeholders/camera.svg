@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="100%" height="100%">
+  <rect width="600" height="400" fill="#1e293b" />
+  <!-- Action Cam Body -->
+  <rect x="180" y="100" width="240" height="180" rx="20" fill="#0f172a" stroke="#10b981" stroke-width="4" />
+  <!-- Big Lens -->
+  <circle cx="260" cy="190" r="55" fill="#334155" stroke="#10b981" stroke-width="4" />
+  <circle cx="260" cy="190" r="35" fill="#0284c7" />
+  <circle cx="260" cy="190" r="15" fill="#0369a1" />
+  <circle cx="250" cy="180" r="6" fill="#ffffff" opacity="0.8" />
+  <!-- Status Screen -->
+  <rect x="335" y="145" width="65" height="50" rx="6" fill="#10b981" opacity="0.2" stroke="#10b981" stroke-width="1.5" />
+  <text x="367" y="175" font-family="monospace" font-size="14" font-weight="700" fill="#10b981" text-anchor="middle">4K 60</text>
+  <!-- Red record LED -->
+  <circle cx="340" cy="230" r="6" fill="#ef4444" />
+  <text x="300" y="340" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#ffffff" text-anchor="middle">GOPRO HERO 11 BLACK</text>
+</svg>

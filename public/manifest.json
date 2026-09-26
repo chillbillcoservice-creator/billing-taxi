@@ -1,0 +1,17 @@
+{
+  "name": "Billing Taxi - Bir Billing Paragliding",
+  "short_name": "Billing Taxi",
+  "description": "Dedicated shared mountain taxi rides, flight telemetry, community chat, gear market, and digital permits for Bir-Billing paragliding.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b1322",
+  "theme_color": "#082f49",
+  "icons": [
+    {
+      "src": "/placeholders/glider.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,352 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useAuth } from '@/components/ClientShell';
+import TaxiCard from '@/components/TaxiCard';
+import JoinTaxiModal from '@/components/JoinTaxiModal';
+import CreateTaxiModal from '@/components/CreateTaxiModal';
+import { TaxiTripInfo } from '@/lib/types';
+import { PICKUP_LOCATIONS } from '@/lib/constants';
+import {
+  Car,
+  MessageSquare,
+  Search,
+  ShoppingBag,
+  Award,
+  Wind,
+  Plus,
+  Filter,
+  CheckCircle,
+  AlertTriangle,
+  RefreshCw,
+  Compass,
+} from 'lucide-react';
+
+export default function HomePage() {
+  const { user } = useAuth();
+  const [trips, setTrips] = useState<TaxiTripInfo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filterLocation, setFilterLocation] = useState('ALL');
+  const [filterSeats, setFilterSeats] = useState('');
+  const [selectedTripForJoin, setSelectedTripForJoin] = useState<TaxiTripInfo | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [feedbackMsg, setFeedbackMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const fetchTodayTrips = async () => {
+    setLoading(true);
+    try {
+      let url = '/api/taxis?date=today';
+      if (filterLocation !== 'ALL') url += `&pickupLocation=${encodeURIComponent(filterLocation)}`;
+      if (filterSeats) url += `&minSeats=${filterSeats}`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+      if (res.ok) {
+        setTrips(data.trips || []);
+      }
+    } catch (err) {
+      console.error('Failed to load today trips', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTodayTrips();
+  }, [filterLocation, filterSeats]);
+
+  const handleLeaveTrip = async (tripId: string) => {
+    if (!confirm('Are you sure you want to cancel your seat in this taxi?')) return;
+    try {
+      const res = await fetch(`/api/taxis/${tripId}/leave`, { method: 'POST' });
+      const data = await res.json();
+      if (res.ok) {
+        setFeedbackMsg({ type: 'success', text: 'Booking cancelled. Your seat was freed.' });
+        fetchTodayTrips();
+      } else {
+        setFeedbackMsg({ type: 'error', text: data.error || 'Failed to cancel booking' });
+      }
+    } catch (e: any) {
+      setFeedbackMsg({ type: 'error', text: e.message || 'Error cancelling booking' });
+    }
+    setTimeout(() => setFeedbackMsg(null), 4000);
+  };
+
+  const handleCancelTrip = async (tripId: string) => {
+    if (!confirm('Are you sure you want to cancel this entire taxi trip? All passengers will be notified.')) return;
+    try {
+      const res = await fetch(`/api/taxis/${tripId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'CANCELLED' }),
+      });
+      if (res.ok) {
+        setFeedbackMsg({ type: 'success', text: 'Trip has been marked CANCELLED.' });
+        fetchTodayTrips();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleCompleteTrip = async (tripId: string) => {
+    try {
+      const res = await fetch(`/api/taxis/${tripId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'COMPLETED' }),
+      });
+      if (res.ok) {
+        setFeedbackMsg({ type: 'success', text: 'Trip marked completed.' });
+        fetchTodayTrips();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  return (
+    <div className="flex-1 flex flex-col p-4 space-y-5">
+      {/* Mountain Flight Telemetry Banner */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-sky-900 via-slate-900 to-slate-950 p-4 border border-sky-800/60 shadow-xl">
+        <div className="absolute -right-4 -bottom-6 opacity-10 pointer-events-none">
+          <Compass className="w-44 h-44 text-sky-400" />
+        </div>
+
+        <div className="flex items-center justify-between gap-2 mb-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            Bir-Billing Takeoff Telemetry
+          </span>
+          <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+            FLYABLE 🟢
+          </span>
+        </div>
+
+        <h1 className="text-xl font-black text-white leading-tight mb-1">
+          Shared Mountain Taxis
+        </h1>
+        <p className="text-xs text-sky-200/90 leading-relaxed mb-3">
+          Bir Landing Site (1,525m) → Billing Take-Off (2,430m). Book an open seat or share your vehicle.
+        </p>
+
+        {/* Live Weather Metrics */}
+        <div className="grid grid-cols-3 gap-2 text-center bg-slate-950/60 rounded-2xl p-2.5 border border-sky-900/60 backdrop-blur-sm">
+          <div>
+            <span className="text-[10px] text-slate-400 block font-medium">LAUNCH WIND</span>
+            <span className="text-xs font-bold text-sky-300">12-14 km/h SW</span>
+          </div>
+          <div className="border-x border-slate-800">
+            <span className="text-[10px] text-slate-400 block font-medium">CLOUDBASE</span>
+            <span className="text-xs font-bold text-amber-400">3,800m MSL</span>
+          </div>
+          <div>
+            <span className="text-[10px] text-slate-400 block font-medium">TEMP (LAUNCH)</span>
+            <span className="text-xs font-bold text-emerald-400">18°C Sunny</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Feedback Alert Toast */}
+      {feedbackMsg && (
+        <div
+          className={`p-3 rounded-2xl text-xs font-medium flex items-center gap-2 ${
+            feedbackMsg.type === 'success'
+              ? 'bg-emerald-950/90 text-emerald-300 border border-emerald-800'
+              : 'bg-rose-950/90 text-rose-300 border border-rose-800'
+          }`}
+        >
+          {feedbackMsg.type === 'success' ? (
+            <CheckCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+          ) : (
+            <AlertTriangle className="w-4 h-4 shrink-0 text-rose-400" />
+          )}
+          <span>{feedbackMsg.text}</span>
+        </div>
+      )}
+
+      {/* Main Module Navigation Quick Cards */}
+      <div className="grid grid-cols-5 gap-2">
+        <Link
+          href="/taxis"
+          className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-sky-950/70 border border-sky-800/80 hover:border-sky-500 hover:bg-sky-900/50 transition-all text-center group"
+        >
+          <div className="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+            <Car className="w-4 h-4" />
+          </div>
+          <span className="text-[10px] font-bold text-slate-200">Taxis</span>
+        </Link>
+
+        <Link
+          href="/chat"
+          className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group"
+        >
+          <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+            <MessageSquare className="w-4 h-4" />
+          </div>
+          <span className="text-[10px] font-bold text-slate-200">Chat</span>
+        </Link>
+
+        <Link
+          href="/lost-found"
+          className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group"
+        >
+          <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+            <Search className="w-4 h-4" />
+          </div>
+          <span className="text-[10px] font-bold text-slate-200">Lost/Found</span>
+        </Link>
+
+        <Link
+          href="/marketplace"
+          className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group"
+        >
+          <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+            <ShoppingBag className="w-4 h-4" />
+          </div>
+          <span className="text-[10px] font-bold text-slate-200">Market</span>
+        </Link>
+
+        <Link
+          href="/permissions"
+          className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group"
+        >
+          <div className="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+            <Award className="w-4 h-4" />
+          </div>
+          <span className="text-[10px] font-bold text-slate-200">Permits</span>
+        </Link>
+      </div>
+
+      {/* Section Header: TODAY'S BILLING TAXIS */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-base font-extrabold text-white tracking-tight">
+                TODAY'S BILLING TAXIS
+              </h2>
+              <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-xs font-bold border border-sky-500/30">
+                {trips.length}
+              </span>
+            </div>
+            <p className="text-xs text-slate-400">Available rides departing today</p>
+          </div>
+
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md shadow-amber-500/20 active:scale-95 transition-all"
+          >
+            <Plus className="w-3.5 h-3.5 stroke-[3px]" />
+            <span>Create Taxi</span>
+          </button>
+        </div>
+
+        {/* Filters */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
+          <div className="flex items-center gap-1 bg-slate-850 border border-slate-700/80 rounded-xl px-2.5 py-1.5 shrink-0">
+            <Filter className="w-3 h-3 text-slate-400" />
+            <select
+              value={filterLocation}
+              onChange={(e) => setFilterLocation(e.target.value)}
+              className="bg-transparent text-slate-200 focus:outline-none text-xs"
+            >
+              <option value="ALL">All Pickup Spots</option>
+              {PICKUP_LOCATIONS.map((loc) => (
+                <option key={loc} value={loc}>
+                  {loc.split('(')[0]}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-1 bg-slate-850 border border-slate-700/80 rounded-xl px-2.5 py-1.5 shrink-0">
+            <select
+              value={filterSeats}
+              onChange={(e) => setFilterSeats(e.target.value)}
+              className="bg-transparent text-slate-200 focus:outline-none text-xs"
+            >
+              <option value="">Any Seats</option>
+              <option value="1">1+ Seats Open</option>
+              <option value="2">2+ Seats Open</option>
+              <option value="4">4+ Seats Open</option>
+            </select>
+          </div>
+
+          <button
+            onClick={fetchTodayTrips}
+            className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white shrink-0 ml-auto"
+            title="Refresh"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
+
+        {/* Trips List */}
+        {loading ? (
+          <div className="space-y-3 py-4">
+            {[1, 2].map((i) => (
+              <div key={i} className="h-44 bg-slate-900/60 rounded-2xl animate-pulse border border-slate-800" />
+            ))}
+          </div>
+        ) : trips.length > 0 ? (
+          <div className="space-y-3">
+            {trips.map((trip) => (
+              <TaxiCard
+                key={trip.id}
+                trip={trip}
+                currentUser={user}
+                onJoinClick={(t) => setSelectedTripForJoin(t)}
+                onLeaveClick={handleLeaveTrip}
+                onCancelTrip={handleCancelTrip}
+                onCompleteTrip={handleCompleteTrip}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-10 px-4 bg-slate-900/50 rounded-3xl border border-dashed border-slate-800 space-y-2">
+            <Car className="w-10 h-10 text-slate-600 mx-auto" />
+            <h3 className="text-sm font-bold text-slate-300">No Taxis Listed Yet Today</h3>
+            <p className="text-xs text-slate-500 max-w-xs mx-auto">
+              Be the first to create a taxi trip to Billing Take-Off Point or check back shortly.
+            </p>
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs shadow-md shadow-sky-600/20"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Create First Ride</span>
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Modals */}
+      {selectedTripForJoin && (
+        <JoinTaxiModal
+          trip={selectedTripForJoin}
+          currentUser={user}
+          onClose={() => setSelectedTripForJoin(null)}
+          onSuccess={() => {
+            setFeedbackMsg({ type: 'success', text: 'Seat booked successfully! See you at pickup.' });
+            fetchTodayTrips();
+            setTimeout(() => setFeedbackMsg(null), 4000);
+          }}
+        />
+      )}
+
+      {showCreateModal && (
+        <CreateTaxiModal
+          currentUser={user}
+          onClose={() => setShowCreateModal(false)}
+          onSuccess={() => {
+            setFeedbackMsg({ type: 'success', text: 'New taxi trip published successfully!' });
+            fetchTodayTrips();
+            setTimeout(() => setFeedbackMsg(null), 4000);
+          }}
+        />
+      )}
+    </div>
+  );
+}
