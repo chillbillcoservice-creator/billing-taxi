@@ -10,10 +10,6 @@ import { TaxiTripInfo } from '@/lib/types';
 import { PICKUP_LOCATIONS } from '@/lib/constants';
 import {
   Car,
-  MessageSquare,
-  Search,
-  ShoppingBag,
-  Award,
   Wind,
   Plus,
   Filter,
@@ -177,58 +173,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Main Module Navigation Quick Cards - strictly responsive without overflow */}
-      <div className="grid grid-cols-5 gap-1.5 sm:gap-2.5 w-full max-w-full">
-        <Link
-          href="/taxis"
-          className="flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-2xl bg-sky-950/80 border border-sky-800/80 hover:border-sky-500 hover:bg-sky-900/50 transition-all text-center group active:scale-95 shadow-md min-w-0"
-        >
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-sky-500/20 text-sky-400 flex items-center justify-center mb-1 group-hover:scale-105 transition-transform shadow-inner shrink-0">
-            <Car className="w-5 h-5" />
-          </div>
-          <span className="text-[11px] sm:text-xs font-bold text-slate-100 truncate w-full text-center">Taxis</span>
-        </Link>
 
-        <Link
-          href="/chat"
-          className="flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group active:scale-95 shadow-md min-w-0"
-        >
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-1 group-hover:scale-105 transition-transform shadow-inner shrink-0">
-            <MessageSquare className="w-5 h-5" />
-          </div>
-          <span className="text-[11px] sm:text-xs font-bold text-slate-100 truncate w-full text-center">Chat</span>
-        </Link>
-
-        <Link
-          href="/lost-found"
-          className="flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group active:scale-95 shadow-md min-w-0"
-        >
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-1 group-hover:scale-105 transition-transform shadow-inner shrink-0">
-            <Search className="w-5 h-5" />
-          </div>
-          <span className="text-[11px] sm:text-xs font-bold text-slate-100 truncate w-full text-center">Lost/Found</span>
-        </Link>
-
-        <Link
-          href="/marketplace"
-          className="flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group active:scale-95 shadow-md min-w-0"
-        >
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-1 group-hover:scale-105 transition-transform shadow-inner shrink-0">
-            <ShoppingBag className="w-5 h-5" />
-          </div>
-          <span className="text-[11px] sm:text-xs font-bold text-slate-100 truncate w-full text-center">Market</span>
-        </Link>
-
-        <Link
-          href="/permissions"
-          className="flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group active:scale-95 shadow-md min-w-0"
-        >
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center mb-1 group-hover:scale-105 transition-transform shadow-inner shrink-0">
-            <Award className="w-5 h-5" />
-          </div>
-          <span className="text-[11px] sm:text-xs font-bold text-slate-100 truncate w-full text-center">Permits</span>
-        </Link>
-      </div>
 
       {/* Section Header: TODAY'S BILLING TAXIS */}
       <div className="space-y-3.5 w-full max-w-full">
