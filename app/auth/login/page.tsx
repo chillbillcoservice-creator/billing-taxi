@@ -65,35 +65,35 @@ export default function LoginPage() {
         </div>
       )}
 
-      <form onSubmit={handleLogin} className="space-y-3.5 text-xs">
+      <form onSubmit={handleLogin} className="space-y-4 text-sm">
         <div>
-          <label className="block font-semibold text-slate-300 mb-1">
+          <label className="block font-bold text-slate-200 mb-1.5">
             Username, Phone, or Email
           </label>
           <div className="relative">
-            <User className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+            <User className="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5" />
             <input
               type="text"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
               required
               placeholder="e.g. pilot_arun or admin"
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+              className="w-full min-h-[48px] bg-slate-800/90 border border-slate-700 rounded-2xl pl-11 pr-3.5 py-3 text-base text-white focus:outline-none focus:border-sky-500"
             />
           </div>
         </div>
 
         <div>
-          <label className="block font-semibold text-slate-300 mb-1">Password</label>
+          <label className="block font-bold text-slate-200 mb-1.5">Password</label>
           <div className="relative">
-            <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+            <Lock className="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5" />
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="••••••••"
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+              className="w-full min-h-[48px] bg-slate-800/90 border border-slate-700 rounded-2xl pl-11 pr-3.5 py-3 text-base text-white focus:outline-none focus:border-sky-500"
             />
           </div>
         </div>
@@ -101,10 +101,10 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full mt-2 py-3 rounded-2xl bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 text-white font-bold text-sm shadow-lg shadow-sky-600/30 transition-all flex items-center justify-center gap-2"
+          className="w-full mt-2 min-h-[50px] rounded-2xl bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 text-white font-black text-base shadow-lg shadow-sky-600/30 transition-all flex items-center justify-center gap-2 active:scale-95"
         >
           {loading ? <span>Authenticating...</span> : <span>Sign In</span>}
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-5 h-5" />
         </button>
       </form>
 

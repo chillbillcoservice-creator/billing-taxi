@@ -390,7 +390,7 @@ export default function ChatPage() {
       {/* Input Bar */}
       <form
         onSubmit={handleSendMessage}
-        className="p-2.5 bg-slate-900 border-t border-slate-800 flex items-center gap-2"
+        className="p-3 bg-slate-900/95 border-t border-slate-800 flex items-center gap-2.5 backdrop-blur-md"
       >
         <input
           type="file"
@@ -404,13 +404,13 @@ export default function ChatPage() {
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={uploading}
-          className="p-2 rounded-xl bg-slate-850 hover:bg-slate-800 text-slate-400 hover:text-sky-400 transition-colors shrink-0"
+          className="h-11 w-11 rounded-2xl bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-sky-400 transition-colors shrink-0 flex items-center justify-center active:scale-95"
           title="Attach photo / video from camera or gallery"
         >
           {uploading ? (
-            <RefreshCw className="w-4 h-4 animate-spin text-sky-400" />
+            <RefreshCw className="w-5 h-5 animate-spin text-sky-400" />
           ) : (
-            <Camera className="w-4 h-4" />
+            <Camera className="w-5 h-5" />
           )}
         </button>
 
@@ -418,17 +418,17 @@ export default function ChatPage() {
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder={user ? "Write message... (@username to mention)" : "Sign in to chat"}
+          placeholder={user ? "Write message... (@username)" : "Sign in to chat"}
           disabled={!user}
-          className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500"
+          className="flex-1 min-h-[46px] bg-slate-800/90 border border-slate-700 rounded-2xl px-4 py-2.5 text-base text-white placeholder-slate-500 focus:outline-none focus:border-sky-500"
         />
 
         <button
           type="submit"
           disabled={sending || (!text.trim() && !attachedMedia) || !user}
-          className="p-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 text-white shadow-md shadow-sky-600/20 active:scale-95 transition-all shrink-0"
+          className="h-11 w-11 rounded-2xl bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 text-white shadow-md shadow-sky-600/30 active:scale-95 transition-all shrink-0 flex items-center justify-center"
         >
-          <Send className="w-4 h-4" />
+          <Send className="w-5 h-5" />
         </button>
       </form>
 

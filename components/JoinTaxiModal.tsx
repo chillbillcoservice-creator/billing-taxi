@@ -88,41 +88,40 @@ export default function JoinTaxiModal({
 
         <form onSubmit={handleJoin} className="space-y-4">
           {/* Trip Summary Card */}
-          <div className="bg-slate-950/70 p-3 rounded-2xl border border-slate-800 space-y-2 text-xs">
-            <div className="flex justify-between">
-              <span className="text-slate-400">Pickup:</span>
-              <span className="font-semibold text-slate-200 text-right">{trip.pickupLocation}</span>
+          <div className="bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800 space-y-2 text-sm">
+            <div className="flex justify-between items-center">
+              <span className="text-slate-400 font-medium">Pickup Spot:</span>
+              <span className="font-bold text-slate-100 text-right">{trip.pickupLocation}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-slate-400">Time:</span>
-              <span className="font-bold text-sky-400">{trip.pickupTime}</span>
+            <div className="flex justify-between items-center">
+              <span className="text-slate-400 font-medium">Departure Time:</span>
+              <span className="font-extrabold text-sky-400">{trip.pickupTime}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-slate-400">Driver:</span>
-              <span className="text-slate-200">{trip.driverName}</span>
+            <div className="flex justify-between items-center">
+              <span className="text-slate-400 font-medium">Driver / Host:</span>
+              <span className="text-slate-200 font-semibold">{trip.driverName}</span>
             </div>
-            <div className="flex justify-between pt-1 border-t border-slate-800">
-              <span className="text-slate-400">Seats Available:</span>
-              <span className="font-bold text-emerald-400">{trip.availableSeats}</span>
+            <div className="flex justify-between items-center pt-2 border-t border-slate-800">
+              <span className="text-slate-400 font-medium">Seats Available:</span>
+              <span className="font-extrabold text-emerald-400">{trip.availableSeats}</span>
             </div>
           </div>
 
           {/* Seat Selector */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center justify-between">
+            <label className="block text-sm font-bold text-slate-200 mb-1.5 flex items-center justify-between">
               <span>Number of Seats</span>
-              <span className="text-[11px] text-slate-400">₹{trip.farePerSeat} / seat</span>
+              <span className="text-xs text-amber-400 font-semibold">₹{trip.farePerSeat} / seat</span>
             </label>
             <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-sky-400" />
               <select
                 value={seats}
                 onChange={(e) => setSeats(parseInt(e.target.value, 10))}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+                className="w-full min-h-[48px] bg-slate-800/90 border border-slate-700 rounded-2xl px-3.5 py-3 text-base text-white focus:outline-none focus:border-sky-500 cursor-pointer"
               >
                 {Array.from({ length: trip.availableSeats }, (_, i) => i + 1).map((n) => (
-                  <option key={n} value={n}>
-                    {n} {n === 1 ? 'Passenger / Wing' : 'Passengers / Wings'}
+                  <option key={n} value={n} className="bg-slate-900 text-white">
+                    {n} {n === 1 ? 'Passenger / Pilot Wing' : 'Passengers / Pilot Wings'}
                   </option>
                 ))}
               </select>
@@ -131,42 +130,42 @@ export default function JoinTaxiModal({
 
           {/* Contact Phone */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
+            <label className="block text-sm font-bold text-slate-200 mb-1.5">
               Contact Phone (for driver coordination)
             </label>
             <div className="relative">
-              <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+              <Phone className="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5" />
               <input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 required
                 placeholder="+91 98050 XXXXX"
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+                className="w-full min-h-[48px] bg-slate-800/90 border border-slate-700 rounded-2xl pl-11 pr-3.5 py-3 text-base text-white focus:outline-none focus:border-sky-500"
               />
             </div>
           </div>
 
           {/* Total Fare Banner */}
-          <div className="bg-sky-950/60 border border-sky-800/80 rounded-xl p-3 flex items-center justify-between">
-            <span className="text-xs text-sky-200">Total Payable to Driver:</span>
-            <span className="text-lg font-black text-amber-400">₹{totalFare}</span>
+          <div className="bg-sky-950/80 border border-sky-800/80 rounded-2xl p-3.5 flex items-center justify-between shadow-inner">
+            <span className="text-sm font-semibold text-sky-200">Total Payable to Driver:</span>
+            <span className="text-2xl font-black text-amber-400">₹{totalFare}</span>
           </div>
 
-          <p className="text-[11px] text-slate-400 text-center">
+          <p className="text-xs text-slate-400 text-center leading-relaxed">
             * Please arrive at the pickup spot 10 minutes prior to departure with your glider bag ready.
           </p>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-2xl bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 text-white font-bold text-sm shadow-lg shadow-sky-600/30 transition-all flex items-center justify-center gap-2"
+            className="w-full min-h-[50px] rounded-2xl bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 text-white font-black text-base shadow-lg shadow-sky-600/30 transition-all flex items-center justify-center gap-2 active:scale-95"
           >
             {loading ? (
               <span>Securing Seat...</span>
             ) : (
               <>
-                <CheckCircle className="w-4 h-4" />
+                <CheckCircle className="w-5 h-5" />
                 <span>Confirm & Join Taxi</span>
               </>
             )}

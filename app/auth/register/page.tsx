@@ -70,13 +70,13 @@ export default function RegisterPage() {
         </div>
       )}
 
-      <form onSubmit={handleRegister} className="space-y-3 text-xs">
+      <form onSubmit={handleRegister} className="space-y-4 text-sm">
         {/* Account Role Selector */}
-        <div className="flex gap-2 p-1 bg-slate-950 rounded-2xl border border-slate-800">
+        <div className="flex gap-2 p-1.5 bg-slate-950 rounded-2xl border border-slate-800 shadow-inner">
           <button
             type="button"
             onClick={() => setRole('MEMBER')}
-            className={`flex-1 py-2 font-bold rounded-xl transition-all ${
+            className={`flex-1 py-2.5 font-black text-sm rounded-xl transition-all ${
               role === 'MEMBER' ? 'bg-sky-600 text-white shadow-md' : 'text-slate-400'
             }`}
           >
@@ -85,7 +85,7 @@ export default function RegisterPage() {
           <button
             type="button"
             onClick={() => setRole('PARTNER')}
-            className={`flex-1 py-2 font-bold rounded-xl transition-all ${
+            className={`flex-1 py-2.5 font-black text-sm rounded-xl transition-all ${
               role === 'PARTNER' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400'
             }`}
           >
@@ -94,56 +94,56 @@ export default function RegisterPage() {
         </div>
 
         <div>
-          <label className="block font-semibold text-slate-300 mb-1">Full Name</label>
+          <label className="block font-bold text-slate-200 mb-1.5">Full Name</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
             placeholder="e.g. Arun Sharma"
-            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+            className="w-full min-h-[48px] bg-slate-800/90 border border-slate-700 rounded-2xl px-3.5 py-3 text-base text-white focus:outline-none focus:border-sky-500"
           />
         </div>
 
         <div>
-          <label className="block font-semibold text-slate-300 mb-1">Username (Handle)</label>
+          <label className="block font-bold text-slate-200 mb-1.5">Username (Handle)</label>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
             placeholder="e.g. arun_sky"
-            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+            className="w-full min-h-[48px] bg-slate-800/90 border border-slate-700 rounded-2xl px-3.5 py-3 text-base text-white focus:outline-none focus:border-sky-500"
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2.5">
           <div>
-            <label className="block font-semibold text-slate-300 mb-1">Phone Number</label>
+            <label className="block font-bold text-slate-200 mb-1.5">Phone Number</label>
             <input
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required
               placeholder="+91 98050 XXXXX"
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+              className="w-full min-h-[48px] bg-slate-800/90 border border-slate-700 rounded-2xl px-3.5 py-3 text-base text-white focus:outline-none focus:border-sky-500"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-300 mb-1">Email (Optional)</label>
+            <label className="block font-bold text-slate-200 mb-1.5">Email (Optional)</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="pilot@fly.com"
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+              className="w-full min-h-[48px] bg-slate-800/90 border border-slate-700 rounded-2xl px-3.5 py-3 text-base text-white focus:outline-none focus:border-sky-500"
             />
           </div>
         </div>
 
         <div>
-          <label className="block font-semibold text-slate-300 mb-1">
+          <label className="block font-bold text-slate-200 mb-1.5">
             Paraglider Model / Wing (Optional)
           </label>
           <input
@@ -151,29 +151,29 @@ export default function RegisterPage() {
             value={pilotGlider}
             onChange={(e) => setPilotGlider(e.target.value)}
             placeholder="e.g. Gin Bolero 6, Ozone Delta 4"
-            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+            className="w-full min-h-[48px] bg-slate-800/90 border border-slate-700 rounded-2xl px-3.5 py-3 text-base text-white focus:outline-none focus:border-sky-500"
           />
         </div>
 
         <div>
-          <label className="block font-semibold text-slate-300 mb-1">Password</label>
+          <label className="block font-bold text-slate-200 mb-1.5">Password</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             placeholder="••••••••"
-            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+            className="w-full min-h-[48px] bg-slate-800/90 border border-slate-700 rounded-2xl px-3.5 py-3 text-base text-white focus:outline-none focus:border-sky-500"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full mt-2 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:bg-slate-800 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2"
+          className="w-full mt-3 min-h-[50px] rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:bg-slate-800 text-slate-950 font-black text-base shadow-lg shadow-amber-500/25 active:scale-95 transition-all flex items-center justify-center gap-2"
         >
           {loading ? <span>Creating Account...</span> : <span>Complete Registration</span>}
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-5 h-5" />
         </button>
       </form>
 

@@ -87,22 +87,22 @@ export default function TaxisPage() {
     : trips;
 
   return (
-    <div className="flex-1 flex flex-col p-4 space-y-4">
+    <div className="flex-1 flex flex-col p-4 space-y-5">
       {/* Top Banner */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-black text-white flex items-center gap-2">
-            <Car className="w-5 h-5 text-amber-400" />
+          <h1 className="text-2xl font-black text-white flex items-center gap-2">
+            <Car className="w-6 h-6 text-amber-400" />
             <span>Taxi Sharing Hub</span>
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs sm:text-sm text-slate-400 font-medium">
             Bir Landing Ground ↔ Billing Launch (2,430m)
           </p>
         </div>
 
         <button
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md shadow-amber-500/20 active:scale-95 transition-all"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/25 active:scale-95 transition-all"
         >
           <Plus className="w-4 h-4 stroke-[3px]" />
           <span>Host Ride</span>
@@ -112,26 +112,26 @@ export default function TaxisPage() {
       {/* Toast */}
       {toast && (
         <div
-          className={`p-3 rounded-2xl text-xs font-medium flex items-center gap-2 ${
+          className={`p-3.5 rounded-2xl text-sm font-semibold flex items-center gap-2.5 shadow-lg ${
             toast.type === 'success'
-              ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
-              : 'bg-rose-950 text-rose-300 border border-rose-800'
+              ? 'bg-emerald-950 text-emerald-200 border border-emerald-800'
+              : 'bg-rose-950 text-rose-200 border border-rose-800'
           }`}
         >
           {toast.type === 'success' ? (
-            <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+            <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
           ) : (
-            <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+            <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
           )}
           <span>{toast.text}</span>
         </div>
       )}
 
       {/* Segmented Tab */}
-      <div className="flex p-1 bg-slate-950 rounded-2xl border border-slate-800">
+      <div className="flex p-1.5 bg-slate-950 rounded-2xl border border-slate-800 shadow-inner">
         <button
           onClick={() => setActiveTab('ALL')}
-          className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
+          className={`flex-1 py-2.5 text-sm font-black rounded-xl transition-all ${
             activeTab === 'ALL'
               ? 'bg-sky-600 text-white shadow-md'
               : 'text-slate-400 hover:text-slate-200'
@@ -141,7 +141,7 @@ export default function TaxisPage() {
         </button>
         <button
           onClick={() => setActiveTab('MY_RIDES')}
-          className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
+          className={`flex-1 py-2.5 text-sm font-black rounded-xl transition-all ${
             activeTab === 'MY_RIDES'
               ? 'bg-sky-600 text-white shadow-md'
               : 'text-slate-400 hover:text-slate-200'
@@ -152,50 +152,50 @@ export default function TaxisPage() {
       </div>
 
       {/* Filter Controls */}
-      <div className="grid grid-cols-3 gap-2 text-xs">
+      <div className="grid grid-cols-3 gap-2.5 text-sm">
         {/* Date Filter */}
-        <div className="bg-slate-850 p-2 rounded-xl border border-slate-800">
-          <span className="text-[10px] text-slate-400 block font-semibold mb-0.5">DATE</span>
+        <div className="bg-slate-850/90 p-2.5 rounded-2xl border border-slate-750 shadow-sm">
+          <span className="text-xs text-slate-400 block font-bold mb-1 uppercase tracking-wider">DATE</span>
           <select
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value as any)}
-            className="w-full bg-transparent text-slate-200 focus:outline-none text-xs font-medium"
+            className="w-full bg-transparent text-slate-100 focus:outline-none text-sm font-semibold cursor-pointer"
           >
-            <option value="today">Today Only</option>
-            <option value="all">All Dates</option>
+            <option value="today" className="bg-slate-900 text-white">Today Only</option>
+            <option value="all" className="bg-slate-900 text-white">All Dates</option>
           </select>
         </div>
 
         {/* Pickup Filter */}
-        <div className="bg-slate-850 p-2 rounded-xl border border-slate-800">
-          <span className="text-[10px] text-slate-400 block font-semibold mb-0.5">PICKUP</span>
+        <div className="bg-slate-850/90 p-2.5 rounded-2xl border border-slate-750 shadow-sm">
+          <span className="text-xs text-slate-400 block font-bold mb-1 uppercase tracking-wider">PICKUP</span>
           <select
             value={pickupFilter}
             onChange={(e) => setPickupFilter(e.target.value)}
-            className="w-full bg-transparent text-slate-200 focus:outline-none text-xs font-medium truncate"
+            className="w-full bg-transparent text-slate-100 focus:outline-none text-sm font-semibold truncate cursor-pointer"
           >
-            <option value="ALL">All Spots</option>
+            <option value="ALL" className="bg-slate-900 text-white">All Spots</option>
             {PICKUP_LOCATIONS.map((loc) => (
-              <option key={loc} value={loc}>
-                {loc.split('(')[0]}
+              <option key={loc} value={loc} className="bg-slate-900 text-white">
+                {loc.split('(')[0].trim()}
               </option>
             ))}
           </select>
         </div>
 
         {/* Status Filter */}
-        <div className="bg-slate-850 p-2 rounded-xl border border-slate-800">
-          <span className="text-[10px] text-slate-400 block font-semibold mb-0.5">STATUS</span>
+        <div className="bg-slate-850/90 p-2.5 rounded-2xl border border-slate-750 shadow-sm">
+          <span className="text-xs text-slate-400 block font-bold mb-1 uppercase tracking-wider">STATUS</span>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full bg-transparent text-slate-200 focus:outline-none text-xs font-medium"
+            className="w-full bg-transparent text-slate-100 focus:outline-none text-sm font-semibold cursor-pointer"
           >
-            <option value="ALL">All Status</option>
-            <option value="OPEN">Open</option>
-            <option value="ALMOST_FULL">Almost Full</option>
-            <option value="FULL">Full</option>
-            <option value="COMPLETED">Completed</option>
+            <option value="ALL" className="bg-slate-900 text-white">All Status</option>
+            <option value="OPEN" className="bg-slate-900 text-white">Open</option>
+            <option value="ALMOST_FULL" className="bg-slate-900 text-white">Almost Full</option>
+            <option value="FULL" className="bg-slate-900 text-white">Full</option>
+            <option value="COMPLETED" className="bg-slate-900 text-white">Completed</option>
           </select>
         </div>
       </div>

@@ -160,11 +160,11 @@ export default function LostFoundPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-black text-white flex items-center gap-2">
-            <Search className="w-5 h-5 text-amber-400" />
+          <h1 className="text-2xl font-black text-white flex items-center gap-2">
+            <Search className="w-6 h-6 text-amber-400" />
             <span>Lost & Found Board</span>
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs sm:text-sm text-slate-400 font-medium">
             Recover lost radios, varios, cameras, & flying gear
           </p>
         </div>
@@ -177,7 +177,7 @@ export default function LostFoundPage() {
             }
             setShowCreateModal(true);
           }}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md shadow-amber-500/20 active:scale-95 transition-all"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/25 active:scale-95 transition-all"
         >
           <Plus className="w-4 h-4 stroke-[3px]" />
           <span>Report Item</span>
@@ -185,34 +185,34 @@ export default function LostFoundPage() {
       </div>
 
       {toast && (
-        <div className="p-3 bg-emerald-950 border border-emerald-800 text-emerald-300 text-xs rounded-xl flex items-center gap-2 shadow-lg">
-          <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+        <div className="p-3.5 bg-emerald-950 text-emerald-200 border border-emerald-800 text-sm font-semibold rounded-2xl flex items-center gap-2.5 shadow-lg">
+          <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
           <span>{toast}</span>
         </div>
       )}
 
       {/* Type Selector (ALL / LOST / FOUND) */}
-      <div className="flex p-1 bg-slate-950 rounded-2xl border border-slate-800">
+      <div className="flex p-1.5 bg-slate-950 rounded-2xl border border-slate-800 shadow-inner">
         <button
           onClick={() => setTypeFilter('ALL')}
-          className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
-            typeFilter === 'ALL' ? 'bg-sky-600 text-white shadow-md' : 'text-slate-400'
+          className={`flex-1 py-2.5 text-sm font-black rounded-xl transition-all ${
+            typeFilter === 'ALL' ? 'bg-sky-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           All Items
         </button>
         <button
           onClick={() => setTypeFilter('LOST')}
-          className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
-            typeFilter === 'LOST' ? 'bg-rose-600 text-white shadow-md' : 'text-slate-400'
+          className={`flex-1 py-2.5 text-sm font-black rounded-xl transition-all ${
+            typeFilter === 'LOST' ? 'bg-rose-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           Lost Gear
         </button>
         <button
           onClick={() => setTypeFilter('FOUND')}
-          className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
-            typeFilter === 'FOUND' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-400'
+          className={`flex-1 py-2.5 text-sm font-black rounded-xl transition-all ${
+            typeFilter === 'FOUND' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           Found Gear
@@ -220,27 +220,27 @@ export default function LostFoundPage() {
       </div>
 
       {/* Search & Category Filter */}
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         <div className="relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+          <Search className="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search lost walkie, vario, GoPro, harness..."
-            className="w-full bg-slate-850 border border-slate-700/80 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-sky-500"
+            className="w-full min-h-[48px] bg-slate-850/90 border border-slate-750 rounded-2xl pl-11 pr-4 py-3 text-base text-white placeholder-slate-400 focus:outline-none focus:border-sky-500 shadow-sm"
           />
         </div>
 
-        <div className="flex gap-2 text-xs">
+        <div className="flex gap-2.5 text-sm">
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="flex-1 bg-slate-850 border border-slate-700/80 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none"
+            className="flex-1 min-h-[46px] bg-slate-850/90 border border-slate-750 rounded-2xl px-3.5 py-2.5 text-sm font-semibold text-slate-100 focus:outline-none cursor-pointer shadow-sm"
           >
-            <option value="ALL">All Categories</option>
+            <option value="ALL" className="bg-slate-900 text-white">All Categories</option>
             {LOST_FOUND_CATEGORIES.map((cat) => (
-              <option key={cat.id} value={cat.id}>
+              <option key={cat.id} value={cat.id} className="bg-slate-900 text-white">
                 {cat.label}
               </option>
             ))}
@@ -249,11 +249,11 @@ export default function LostFoundPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-slate-850 border border-slate-700/80 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none"
+            className="min-h-[46px] bg-slate-850/90 border border-slate-750 rounded-2xl px-3.5 py-2.5 text-sm font-semibold text-slate-100 focus:outline-none cursor-pointer shadow-sm"
           >
-            <option value="ALL">All Status</option>
-            <option value="OPEN">Open Only</option>
-            <option value="RESOLVED">Resolved</option>
+            <option value="ALL" className="bg-slate-900 text-white">All Status</option>
+            <option value="OPEN" className="bg-slate-900 text-white">Open Only</option>
+            <option value="RESOLVED" className="bg-slate-900 text-white">Resolved</option>
           </select>
         </div>
       </div>

@@ -174,57 +174,57 @@ export default function PermissionsPage() {
     }));
 
   return (
-    <div className="flex-1 flex flex-col p-4 space-y-4">
+    <div className="flex-1 flex flex-col p-4 space-y-5">
       {/* Header */}
       <div>
         <div className="flex items-center gap-2">
-          <Award className="w-5 h-5 text-amber-400" />
-          <h1 className="text-xl font-black text-white">Partner Permits & Clearance</h1>
+          <Award className="w-6 h-6 text-amber-400" />
+          <h1 className="text-2xl font-black text-white">Partner Permits & Clearance</h1>
         </div>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs sm:text-sm text-slate-400 font-medium">
           Official paragliding operator clearance, digital permits & QR verification for Bir-Billing.
         </p>
       </div>
 
       {toast && (
         <div
-          className={`p-3 text-xs rounded-xl flex items-center gap-2 shadow-lg ${
+          className={`p-3.5 text-sm font-semibold rounded-2xl flex items-center gap-2.5 shadow-lg ${
             toast.type === 'success'
-              ? 'bg-emerald-950 border border-emerald-800 text-emerald-300'
-              : 'bg-rose-950 border border-rose-800 text-rose-300'
+              ? 'bg-emerald-950 border border-emerald-800 text-emerald-200'
+              : 'bg-rose-950 border border-rose-800 text-rose-200'
           }`}
         >
           {toast.type === 'success' ? (
-            <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+            <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
           ) : (
-            <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+            <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
           )}
           <span>{toast.text}</span>
         </div>
       )}
 
       {/* Tabs */}
-      <div className="flex p-1 bg-slate-950 rounded-2xl border border-slate-800">
+      <div className="flex p-1.5 bg-slate-950 rounded-2xl border border-slate-800 shadow-inner">
         <button
           onClick={() => setActiveTab('MY_PERMITS')}
-          className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
-            activeTab === 'MY_PERMITS' ? 'bg-sky-600 text-white shadow-md' : 'text-slate-400'
+          className={`flex-1 py-2.5 text-sm font-black rounded-xl transition-all ${
+            activeTab === 'MY_PERMITS' ? 'bg-sky-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           Digital Permits ({permits.length})
         </button>
         <button
           onClick={() => setActiveTab('MY_APPLICATIONS')}
-          className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
-            activeTab === 'MY_APPLICATIONS' ? 'bg-sky-600 text-white shadow-md' : 'text-slate-400'
+          className={`flex-1 py-2.5 text-sm font-black rounded-xl transition-all ${
+            activeTab === 'MY_APPLICATIONS' ? 'bg-sky-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           Applications ({applications.length})
         </button>
         <button
           onClick={() => setActiveTab('NEW_APPLICATION')}
-          className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
-            activeTab === 'NEW_APPLICATION' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400'
+          className={`flex-1 py-2.5 text-sm font-black rounded-xl transition-all ${
+            activeTab === 'NEW_APPLICATION' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           + Apply

@@ -27,7 +27,7 @@ export default function BottomNav({ user }: BottomNavProps) {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800/90 px-2 py-1.5 no-print safe-area-pb">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800/90 px-2 py-2 no-print safe-area-pb shadow-2xl">
       <div className="max-w-md mx-auto flex items-center justify-around">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -37,16 +37,16 @@ export default function BottomNav({ user }: BottomNavProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl transition-all duration-200 active:scale-95 ${
                 isActive
-                  ? 'text-sky-400 font-semibold'
-                  : 'text-slate-400 hover:text-slate-200 font-normal'
+                  ? 'text-sky-400 font-bold'
+                  : 'text-slate-400 hover:text-slate-200 font-medium'
               }`}
             >
-              <div className={`p-1 rounded-lg ${isActive ? 'bg-sky-500/15' : 'bg-transparent'}`}>
+              <div className={`p-1.5 rounded-xl ${isActive ? 'bg-sky-500/20 text-sky-300' : 'bg-transparent'}`}>
                 <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5px]' : 'stroke-2'}`} />
               </div>
-              <span className="text-[10px] tracking-tight mt-0.5">{item.label}</span>
+              <span className="text-xs tracking-tight mt-1">{item.label}</span>
             </Link>
           );
         })}

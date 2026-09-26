@@ -79,67 +79,67 @@ export default function TaxiCard({
   });
 
   return (
-    <div className="bg-slate-900/90 border border-slate-800 hover:border-slate-700/80 rounded-2xl p-4 shadow-lg transition-all">
+    <div className="bg-slate-900/95 border border-slate-800 hover:border-slate-700/80 rounded-3xl p-4 sm:p-5 shadow-xl transition-all">
       {/* Header: Time, Date & Status */}
-      <div className="flex items-center justify-between gap-2 mb-3">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 bg-sky-950/80 border border-sky-800/80 px-2.5 py-1 rounded-xl text-sky-300 font-bold text-sm">
-            <Clock className="w-3.5 h-3.5 text-sky-400" />
+      <div className="flex items-center justify-between gap-2 mb-3.5">
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5 bg-sky-950 border border-sky-800/90 px-3 py-1.5 rounded-2xl text-sky-200 font-black text-sm sm:text-base">
+            <Clock className="w-4 h-4 text-sky-400" />
             <span>{trip.pickupTime}</span>
           </div>
-          <span className="text-xs text-slate-400 font-medium">{tripDateStr}</span>
+          <span className="text-sm text-slate-300 font-semibold">{tripDateStr}</span>
         </div>
         {getStatusBadge()}
       </div>
 
       {/* Route: Pickup -> Destination */}
-      <div className="space-y-1.5 mb-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800/60">
-        <div className="flex items-start gap-2 text-xs">
-          <MapPin className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-          <div>
-            <span className="text-slate-400 text-[10px] block uppercase font-medium">Pickup</span>
-            <span className="font-semibold text-slate-100 text-sm leading-tight">{trip.pickupLocation}</span>
+      <div className="space-y-2 mb-3.5 bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/80">
+        <div className="flex items-start gap-2.5">
+          <MapPin className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+          <div className="min-w-0 flex-1">
+            <span className="text-slate-400 text-xs block uppercase font-bold tracking-wider">Pickup Spot</span>
+            <span className="font-bold text-slate-100 text-base leading-snug block">{trip.pickupLocation}</span>
           </div>
         </div>
-        <div className="ml-2 pl-3 border-l-2 border-dashed border-slate-700/80 py-0.5 my-0.5" />
-        <div className="flex items-start gap-2 text-xs">
-          <MapPin className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
-          <div>
-            <span className="text-slate-400 text-[10px] block uppercase font-medium">Destination</span>
-            <span className="font-semibold text-sky-300 text-sm leading-tight">{trip.destination}</span>
+        <div className="ml-2.5 pl-3 border-l-2 border-dashed border-slate-700/80 py-1" />
+        <div className="flex items-start gap-2.5">
+          <MapPin className="w-5 h-5 text-sky-400 shrink-0 mt-0.5" />
+          <div className="min-w-0 flex-1">
+            <span className="text-slate-400 text-xs block uppercase font-bold tracking-wider">Destination</span>
+            <span className="font-bold text-sky-300 text-base leading-snug block">{trip.destination}</span>
           </div>
         </div>
       </div>
 
       {/* Driver, Vehicle & Fare */}
-      <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
-        <div className="bg-slate-850 p-2.5 rounded-xl border border-slate-800/80">
-          <span className="text-[10px] text-slate-400 block font-medium">DRIVER / VEHICLE</span>
-          <span className="font-semibold text-slate-200 block truncate">{trip.driverName}</span>
-          <span className="text-[11px] text-slate-400 block truncate">
+      <div className="grid grid-cols-2 gap-2.5 mb-3.5 text-sm">
+        <div className="bg-slate-850/80 p-3 rounded-2xl border border-slate-800">
+          <span className="text-xs text-slate-400 block font-bold uppercase tracking-wider mb-0.5">Driver / Vehicle</span>
+          <span className="font-bold text-slate-100 block truncate text-sm">{trip.driverName}</span>
+          <span className="text-xs text-slate-300 block truncate">
             {trip.vehicleType || 'Taxi 4x4'} {trip.vehicleNumber ? `• ${trip.vehicleNumber}` : ''}
           </span>
         </div>
 
-        <div className="bg-slate-850 p-2.5 rounded-xl border border-slate-800/80 flex flex-col justify-between">
-          <span className="text-[10px] text-slate-400 block font-medium">FARE PER PASSENGER</span>
+        <div className="bg-slate-850/80 p-3 rounded-2xl border border-slate-800 flex flex-col justify-between">
+          <span className="text-xs text-slate-400 block font-bold uppercase tracking-wider mb-0.5">Fare per Seat</span>
           <div className="flex items-baseline gap-1">
-            <span className="text-lg font-black text-amber-400">₹{trip.farePerSeat}</span>
-            <span className="text-[10px] text-slate-400">/ seat</span>
+            <span className="text-xl font-black text-amber-400">₹{trip.farePerSeat}</span>
+            <span className="text-xs text-slate-400 font-medium">/ seat</span>
           </div>
         </div>
       </div>
 
       {/* Seat Capacity Bar */}
-      <div className="mb-3">
-        <div className="flex justify-between items-center text-xs mb-1.5 font-medium">
-          <span className="flex items-center gap-1 text-slate-300">
-            <Users className="w-3.5 h-3.5 text-sky-400" />
+      <div className="mb-3.5 bg-slate-950/40 p-2.5 rounded-2xl border border-slate-800/60">
+        <div className="flex justify-between items-center text-xs sm:text-sm mb-2 font-semibold">
+          <span className="flex items-center gap-1.5 text-slate-200">
+            <Users className="w-4 h-4 text-sky-400" />
             <span>Seats: {bookedSeats}/{totalSeats} occupied</span>
           </span>
-          <span className="text-slate-400 font-semibold">{trip.availableSeats} available</span>
+          <span className="text-emerald-400 font-bold">{trip.availableSeats} available</span>
         </div>
-        <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+        <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
           <div
             className={`h-full transition-all duration-300 ${
               percentFilled >= 100
@@ -155,18 +155,18 @@ export default function TaxiCard({
 
       {/* Passengers Roster */}
       {trip.bookings && trip.bookings.length > 0 && (
-        <div className="mb-3 pt-2 border-t border-slate-800/80">
-          <span className="text-[10px] text-slate-400 block uppercase font-semibold mb-1.5 tracking-wider">
-            Confirmed Pilots / Riders ({trip.bookings.length})
+        <div className="mb-3.5 pt-2.5 border-t border-slate-800/80">
+          <span className="text-xs text-slate-400 block uppercase font-bold mb-2 tracking-wider">
+            Confirmed Passengers ({trip.bookings.length})
           </span>
           <div className="flex flex-wrap gap-1.5">
             {trip.bookings.map((booking) => (
               <span
                 key={booking.id}
-                className="inline-flex items-center gap-1 bg-slate-800 px-2 py-1 rounded-lg text-[11px] text-slate-200 border border-slate-700/60"
+                className="inline-flex items-center gap-1.5 bg-slate-850 px-2.5 py-1 rounded-xl text-xs text-slate-200 border border-slate-700/60 font-medium"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                <span className="font-medium">{booking.user.name.split(' ')[0]}</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                <span>{booking.user.name.split(' ')[0]}</span>
                 {booking.passengerCount > 1 && (
                   <span className="text-sky-400 font-bold">+{booking.passengerCount - 1}</span>
                 )}
@@ -178,29 +178,29 @@ export default function TaxiCard({
 
       {/* Notes if any */}
       {trip.notes && (
-        <p className="text-xs text-slate-400 italic mb-3 bg-slate-950/40 p-2 rounded-lg border border-slate-800/50">
+        <p className="text-xs sm:text-sm text-slate-300 italic mb-3.5 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
           "{trip.notes}"
         </p>
       )}
 
       {/* Action Buttons */}
-      <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-2">
+      <div className="pt-2.5 border-t border-slate-800/80 flex items-center justify-between gap-2.5 flex-wrap">
         {/* Contact driver */}
         <a
           href={`tel:${trip.driverPhone}`}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors"
+          className="flex items-center gap-2 px-3.5 py-2.5 min-h-[42px] rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-bold transition-colors active:scale-95"
           title="Call driver"
         >
-          <Phone className="w-3.5 h-3.5 text-emerald-400" />
+          <Phone className="w-4 h-4 text-emerald-400" />
           <span>Call Driver</span>
         </a>
 
         {/* Join / Leave / Manage buttons */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           {hasBooked ? (
             <button
               onClick={() => onLeaveClick(trip.id)}
-              className="px-3.5 py-2 rounded-xl bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/40 text-xs font-bold transition-colors"
+              className="px-4 py-2.5 min-h-[42px] rounded-2xl bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/40 text-xs sm:text-sm font-bold transition-colors active:scale-95"
             >
               Cancel My Seat
             </button>
@@ -208,23 +208,23 @@ export default function TaxiCard({
             <button
               onClick={() => onJoinClick(trip)}
               disabled={trip.availableSeats <= 0}
-              className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 text-white font-bold text-xs shadow-md shadow-sky-600/20 transition-all active:scale-95"
+              className="px-5 py-2.5 min-h-[42px] rounded-2xl bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 text-white font-extrabold text-sm shadow-md shadow-sky-600/30 transition-all active:scale-95"
             >
               Join Taxi (₹{trip.farePerSeat})
             </button>
           ) : (
-            <span className="text-xs text-slate-500 font-semibold px-3 py-1.5 bg-slate-800/50 rounded-xl">
+            <span className="text-xs sm:text-sm text-slate-500 font-bold px-3.5 py-2 bg-slate-800/50 rounded-2xl">
               Taxi {trip.status}
             </span>
           )}
 
           {/* Host / Admin Actions */}
           {(isHost || isStaff) && trip.status !== 'COMPLETED' && trip.status !== 'CANCELLED' && (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
               {onCompleteTrip && (
                 <button
                   onClick={() => onCompleteTrip(trip.id)}
-                  className="px-2.5 py-2 rounded-xl bg-emerald-950/80 text-emerald-300 border border-emerald-800/80 hover:bg-emerald-900 text-xs font-semibold transition-colors"
+                  className="px-3 py-2.5 min-h-[42px] rounded-2xl bg-emerald-950/80 text-emerald-300 border border-emerald-800/80 hover:bg-emerald-900 text-xs sm:text-sm font-bold transition-colors"
                   title="Mark Completed"
                 >
                   Done
@@ -233,7 +233,7 @@ export default function TaxiCard({
               {onCancelTrip && (
                 <button
                   onClick={() => onCancelTrip(trip.id)}
-                  className="px-2.5 py-2 rounded-xl bg-slate-800 text-slate-400 hover:text-rose-400 hover:bg-slate-700 text-xs font-semibold transition-colors"
+                  className="px-3 py-2.5 min-h-[42px] rounded-2xl bg-slate-800 text-slate-400 hover:text-rose-400 hover:bg-slate-700 text-xs sm:text-sm font-bold transition-colors"
                   title="Cancel Trip"
                 >
                   Cancel
