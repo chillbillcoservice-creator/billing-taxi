@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { TaxiTripInfo, UserSummary } from '@/lib/types';
-import { Clock, MapPin, Users, Phone, ShieldCheck, CheckCircle2, AlertCircle, XCircle, ChevronRight } from 'lucide-react';
+import { Clock, Phone, ChevronRight, User } from 'lucide-react';
 
 interface TaxiCardProps {
   trip: TaxiTripInfo;
@@ -28,44 +28,40 @@ export default function TaxiCard({
     ? trip.bookings.some((b) => b.userId === currentUser.id && b.status === 'CONFIRMED')
     : false;
 
-  const totalSeats = trip.totalSeats;
-  const bookedSeats = totalSeats - trip.availableSeats;
-  const percentFilled = Math.min(100, Math.round((bookedSeats / totalSeats) * 100));
+  const cleanPickup = trip.pickupLocation.split('(')[0].trim();
+  const cleanDest = trip.destination.split('(')[0].trim();
 
-  // Status badge styling
+  // Status badge
   const getStatusBadge = () => {
     switch (trip.status) {
       case 'OPEN':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-            <CheckCircle2 className="w-3 h-3" />
-            OPEN ({trip.availableSeats} left)
+          <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            {trip.availableSeats} seats open
           </span>
         );
       case 'ALMOST_FULL':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/30">
-            <AlertCircle className="w-3 h-3" />
-            ALMOST FULL ({trip.availableSeats} left)
+          <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            Only {trip.availableSeats} left
           </span>
         );
       case 'FULL':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/30">
-            <XCircle className="w-3 h-3" />
-            FULL
+          <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
+            Full
           </span>
         );
       case 'COMPLETED':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700">
-            COMPLETED
+          <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-slate-800 text-slate-500">
+            Completed
           </span>
         );
       case 'CANCELLED':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-950/60 text-rose-400 border border-rose-900">
-            CANCELLED
+          <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-rose-950/60 text-rose-400 border border-rose-900">
+            Cancelled
           </span>
         );
       default:
@@ -73,174 +69,104 @@ export default function TaxiCard({
     }
   };
 
-  const tripDateStr = new Date(trip.tripDate).toLocaleDateString('en-IN', {
-    weekday: 'short',
-    day: 'numeric',
-    month: 'short',
-  });
-
   return (
-    <div className="bg-slate-900/95 border border-slate-800 hover:border-slate-700/80 rounded-3xl p-4 sm:p-5 shadow-xl transition-all w-full max-w-full overflow-hidden">
-      {/* Header: Time, Date & Status */}
-      <div className="flex items-center justify-between gap-2 mb-3.5 flex-wrap">
-        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-          <div className="flex items-center gap-1.5 bg-sky-950 border border-sky-800/90 px-2.5 sm:px-3 py-1.5 rounded-2xl text-sky-200 font-black text-xs sm:text-base shrink-0">
-            <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-sky-400" />
+    <div className="bg-slate-900 border border-slate-800 hover:border-slate-700/80 rounded-3xl p-3.5 sm:p-4 shadow-lg transition-all w-full max-w-full space-y-2.5">
+      {/* Line 1: Time, Route & Fare */}
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="flex items-center gap-1 bg-sky-950 border border-sky-800/80 px-2 py-0.5 rounded-lg text-sky-300 font-black text-xs shrink-0">
+            <Clock className="w-3 h-3 text-sky-400" />
             <span>{trip.pickupTime}</span>
-          </div>
-          <span className="text-xs sm:text-sm text-slate-300 font-semibold truncate">{tripDateStr}</span>
-        </div>
-        {getStatusBadge()}
-      </div>
+          </span>
 
-      {/* Route: Pickup -> Destination */}
-      <div className="space-y-2 mb-3.5 bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/80">
-        <div className="flex items-start gap-2.5">
-          <MapPin className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-          <div className="min-w-0 flex-1">
-            <span className="text-slate-400 text-xs block uppercase font-bold tracking-wider">Pickup Spot</span>
-            <span className="font-bold text-slate-100 text-base leading-snug block">{trip.pickupLocation}</span>
-          </div>
-        </div>
-        <div className="ml-2.5 pl-3 border-l-2 border-dashed border-slate-700/80 py-1" />
-        <div className="flex items-start gap-2.5">
-          <MapPin className="w-5 h-5 text-sky-400 shrink-0 mt-0.5" />
-          <div className="min-w-0 flex-1">
-            <span className="text-slate-400 text-xs block uppercase font-bold tracking-wider">Destination</span>
-            <span className="font-bold text-sky-300 text-base leading-snug block">{trip.destination}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Driver, Vehicle & Fare */}
-      <div className="grid grid-cols-2 gap-2.5 mb-3.5 text-sm">
-        <div className="bg-slate-850/80 p-3 rounded-2xl border border-slate-800">
-          <span className="text-xs text-slate-400 block font-bold uppercase tracking-wider mb-0.5">Driver / Vehicle</span>
-          <span className="font-bold text-slate-100 block truncate text-sm">{trip.driverName}</span>
-          <span className="text-xs text-slate-300 block truncate">
-            {trip.vehicleType || 'Taxi 4x4'} {trip.vehicleNumber ? `• ${trip.vehicleNumber}` : ''}
+          <span className="font-extrabold text-white text-xs sm:text-sm truncate">
+            {cleanPickup} <span className="text-sky-400 font-bold">→</span> {cleanDest}
           </span>
         </div>
 
-        <div className="bg-slate-850/80 p-3 rounded-2xl border border-slate-800 flex flex-col justify-between">
-          <span className="text-xs text-slate-400 block font-bold uppercase tracking-wider mb-0.5">Fare per Seat</span>
-          <div className="flex items-baseline gap-1">
-            <span className="text-xl font-black text-amber-400">₹{trip.farePerSeat}</span>
-            <span className="text-xs text-slate-400 font-medium">/ seat</span>
-          </div>
+        <div className="flex items-center gap-1 shrink-0">
+          <span className="text-base font-black text-amber-400">₹{trip.farePerSeat}</span>
+          <span className="text-[10px] text-slate-400 font-medium">/seat</span>
         </div>
       </div>
 
-      {/* Seat Capacity Bar */}
-      <div className="mb-3.5 bg-slate-950/40 p-2.5 rounded-2xl border border-slate-800/60">
-        <div className="flex justify-between items-center text-xs sm:text-sm mb-2 font-semibold">
-          <span className="flex items-center gap-1.5 text-slate-200">
-            <Users className="w-4 h-4 text-sky-400" />
-            <span>Seats: {bookedSeats}/{totalSeats} occupied</span>
+      {/* Line 2: Driver, Vehicle & Notes */}
+      <div className="flex items-center justify-between gap-2 text-xs text-slate-400 flex-wrap">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="flex items-center gap-1 font-semibold text-slate-200 truncate">
+            <User className="w-3 h-3 text-slate-400 shrink-0" />
+            <span className="truncate">{trip.driverName}</span>
           </span>
-          <span className="text-emerald-400 font-bold">{trip.availableSeats} available</span>
+          <span className="text-slate-600 font-bold">•</span>
+          <span className="text-slate-400 truncate text-[11px]">
+            {trip.vehicleType ? trip.vehicleType.split('(')[0].trim() : 'Taxi 4x4'}
+          </span>
         </div>
-        <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
-          <div
-            className={`h-full transition-all duration-300 ${
-              percentFilled >= 100
-                ? 'bg-rose-500'
-                : percentFilled >= 75
-                ? 'bg-amber-500'
-                : 'bg-emerald-500'
-            }`}
-            style={{ width: `${percentFilled}%` }}
-          />
-        </div>
-      </div>
 
-      {/* Passengers Roster */}
-      {trip.bookings && trip.bookings.length > 0 && (
-        <div className="mb-3.5 pt-2.5 border-t border-slate-800/80">
-          <span className="text-xs text-slate-400 block uppercase font-bold mb-2 tracking-wider">
-            Confirmed Passengers ({trip.bookings.length})
-          </span>
-          <div className="flex flex-wrap gap-1.5">
-            {trip.bookings.map((booking) => (
-              <span
-                key={booking.id}
-                className="inline-flex items-center gap-1.5 bg-slate-850 px-2.5 py-1 rounded-xl text-xs text-slate-200 border border-slate-700/60 font-medium"
-              >
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                <span>{booking.user.name.split(' ')[0]}</span>
-                {booking.passengerCount > 1 && (
-                  <span className="text-sky-400 font-bold">+{booking.passengerCount - 1}</span>
-                )}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
+        <div>{getStatusBadge()}</div>
+      </div>
 
       {/* Notes if any */}
       {trip.notes && (
-        <p className="text-xs sm:text-sm text-slate-300 italic mb-3.5 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+        <p className="text-[11px] text-slate-300 italic bg-slate-950/60 px-2.5 py-1.5 rounded-xl border border-slate-800/80 truncate">
           "{trip.notes}"
         </p>
       )}
 
-      {/* View Passengers & Details Link */}
-      <div className="mb-3 flex items-center justify-between text-xs pt-1">
-        <Link
-          href={`/taxis/${trip.id}`}
-          className="text-sky-400 hover:text-sky-300 font-bold flex items-center gap-1 hover:underline transition-colors"
-        >
-          <span>View Passengers & Details</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-        </Link>
-        <span className="text-slate-400 text-[11px] font-medium">
-          {trip.bookings?.length || 0} booked
-        </span>
-      </div>
+      {/* Line 3: Direct Actions & Manifest Link */}
+      <div className="pt-2 border-t border-slate-800/70 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-3">
+          {/* Quick Call Button */}
+          <a
+            href={`tel:${trip.driverPhone}`}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-colors active:scale-95"
+            title="Call driver"
+          >
+            <Phone className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="text-xs">Call</span>
+          </a>
 
-      {/* Action Buttons */}
-      <div className="pt-2.5 border-t border-slate-800/80 flex items-center justify-between gap-2.5 flex-wrap">
-        {/* Contact driver */}
-        <a
-          href={`tel:${trip.driverPhone}`}
-          className="flex items-center gap-2 px-3.5 py-2.5 min-h-[42px] rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-bold transition-colors active:scale-95"
-          title="Call driver"
-        >
-          <Phone className="w-4 h-4 text-emerald-400" />
-          <span>Call Driver</span>
-        </a>
+          {/* Passenger Manifest Link */}
+          <Link
+            href={`/taxis/${trip.id}`}
+            className="text-xs text-sky-400 hover:text-sky-300 font-bold flex items-center gap-0.5 hover:underline"
+            title="View booked passengers"
+          >
+            <span>{trip.bookings?.length || 0} Booked</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
 
-        {/* Join / Leave / Manage buttons */}
-        <div className="flex items-center gap-2 flex-wrap">
+        {/* Join / Leave / Host Actions */}
+        <div className="flex items-center gap-1.5">
           {hasBooked ? (
             <button
               onClick={() => onLeaveClick(trip.id)}
-              className="px-4 py-2.5 min-h-[42px] rounded-2xl bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/40 text-xs sm:text-sm font-bold transition-colors active:scale-95"
+              className="px-3 py-1.5 rounded-xl bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/40 text-xs font-bold transition-colors active:scale-95"
             >
-              Cancel My Seat
+              Cancel Seat
             </button>
           ) : trip.status === 'OPEN' || trip.status === 'ALMOST_FULL' ? (
             <button
               onClick={() => onJoinClick(trip)}
               disabled={trip.availableSeats <= 0}
-              className="px-5 py-2.5 min-h-[42px] rounded-2xl bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 text-white font-extrabold text-sm shadow-md shadow-sky-600/30 transition-all active:scale-95"
+              className="px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 text-white font-black text-xs shadow-md shadow-sky-600/20 transition-all active:scale-95"
             >
-              Join Taxi (₹{trip.farePerSeat})
+              Join (₹{trip.farePerSeat})
             </button>
           ) : (
-            <span className="text-xs sm:text-sm text-slate-500 font-bold px-3.5 py-2 bg-slate-800/50 rounded-2xl">
-              Taxi {trip.status}
+            <span className="text-[11px] text-slate-500 font-bold px-2 py-1 bg-slate-800/40 rounded-lg">
+              {trip.status}
             </span>
           )}
 
-          {/* Host / Admin Actions */}
+          {/* Host Done / Cancel */}
           {(isHost || isStaff) && trip.status !== 'COMPLETED' && trip.status !== 'CANCELLED' && (
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1">
               {onCompleteTrip && (
                 <button
                   onClick={() => onCompleteTrip(trip.id)}
-                  className="px-3 py-2.5 min-h-[42px] rounded-2xl bg-emerald-950/80 text-emerald-300 border border-emerald-800/80 hover:bg-emerald-900 text-xs sm:text-sm font-bold transition-colors"
-                  title="Mark Completed"
+                  className="px-2.5 py-1.5 rounded-xl bg-emerald-950/80 text-emerald-300 border border-emerald-800/80 hover:bg-emerald-900 text-xs font-bold transition-colors"
                 >
                   Done
                 </button>
@@ -248,8 +174,7 @@ export default function TaxiCard({
               {onCancelTrip && (
                 <button
                   onClick={() => onCancelTrip(trip.id)}
-                  className="px-3 py-2.5 min-h-[42px] rounded-2xl bg-slate-800 text-slate-400 hover:text-rose-400 hover:bg-slate-700 text-xs sm:text-sm font-bold transition-colors"
-                  title="Cancel Trip"
+                  className="px-2.5 py-1.5 rounded-xl bg-slate-800 text-slate-400 hover:text-rose-400 text-xs font-bold transition-colors"
                 >
                   Cancel
                 </button>

@@ -98,6 +98,52 @@ export default function CreateTaxiModal({ currentUser, onClose, onSuccess }: Cre
           </div>
         )}
 
+        {/* Quick Presets */}
+        <div className="mb-4 space-y-1.5">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+            ⚡ Quick 1-Tap Presets
+          </span>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setPickupLocation(PICKUP_LOCATIONS[0]);
+                setDestination(DESTINATIONS[0]);
+                setFarePerSeat('250');
+                setTotalSeats('6');
+                setVehicleType('Mahindra Bolero 4x4 (Roof Rack)');
+              }}
+              className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700/80 border border-slate-700 text-left transition-all active:scale-95 group"
+            >
+              <span className="font-extrabold text-xs text-amber-400 block group-hover:text-amber-300">
+                🪂 Up to Takeoff
+              </span>
+              <span className="text-[11px] text-slate-400 block truncate">
+                Chowgan → Takeoff (₹250)
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setPickupLocation('Billing Take-Off Point (Paragliding Launch)');
+                setDestination('Bir Landing Site (Sunset Point, Chowgan)');
+                setFarePerSeat('200');
+                setTotalSeats('6');
+                setVehicleType('Mahindra Bolero 4x4 (Roof Rack)');
+              }}
+              className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700/80 border border-slate-700 text-left transition-all active:scale-95 group"
+            >
+              <span className="font-extrabold text-xs text-sky-400 block group-hover:text-sky-300">
+                🏕️ Down to Bir
+              </span>
+              <span className="text-[11px] text-slate-400 block truncate">
+                Takeoff → Landing (₹200)
+              </span>
+            </button>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-4 text-sm">
           {/* Pickup */}
           <div>

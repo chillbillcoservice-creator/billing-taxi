@@ -14,7 +14,7 @@ export default function BottomNav({ user }: BottomNavProps) {
   const pathname = usePathname();
 
   const navItems = [
-    { label: 'Taxis', href: '/taxis', icon: Car },
+    { label: 'Taxis', href: '/', icon: Car },
     { label: 'Chat', href: '/chat', icon: MessageSquare },
     { label: 'Lost/Found', href: '/lost-found', icon: Search },
     { label: 'Market', href: '/marketplace', icon: ShoppingBag },
@@ -31,7 +31,10 @@ export default function BottomNav({ user }: BottomNavProps) {
       <div className="max-w-md mx-auto flex items-center justify-around">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+          const isActive =
+            item.href === '/'
+              ? pathname === '/' || pathname === '/taxis' || pathname.startsWith('/taxis/')
+              : pathname === item.href || pathname.startsWith(item.href);
 
           return (
             <Link
