@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Compass, Wind, User as UserIcon, ShieldCheck, LogOut, Bell } from 'lucide-react';
+import { Compass, User as UserIcon, ShieldCheck, LogOut, Bell } from 'lucide-react';
 import { UserSummary } from '@/lib/types';
 
 interface TopHeaderProps {
@@ -16,16 +16,13 @@ export default function TopHeader({ user, onLogout, unreadCount = 0 }: TopHeader
     <header className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white px-3 sm:px-4 py-2.5 sm:py-3 w-full max-w-full overflow-x-hidden">
       <div className="max-w-md mx-auto flex items-center justify-between gap-2 w-full">
         {/* Brand */}
-        <Link href="/" className="flex items-center gap-2 group min-w-0 shrink">
+        <Link href="/" className="flex items-center gap-2.5 group shrink-0">
           <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-sky-600 to-amber-500 flex items-center justify-center shadow-lg shadow-sky-500/25 group-hover:scale-105 transition-transform shrink-0">
             <Compass className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </div>
-          <div className="min-w-0">
-            <div className="flex items-center gap-1.5 leading-none mb-0.5 sm:mb-1">
-              <span className="font-black text-base sm:text-lg tracking-tight text-white">BILLING</span>
-              <span className="text-[10px] sm:text-xs px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-300 font-black border border-amber-500/40">TAXI</span>
-            </div>
-            <p className="text-[10px] sm:text-xs text-sky-400 font-bold tracking-wide truncate">BIR 1,525m → BILLING 2,430m</p>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <span className="font-black text-lg sm:text-xl tracking-tight text-white leading-none">BILLING</span>
+            <span className="text-[11px] sm:text-xs px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 font-black border border-amber-500/40 tracking-wider leading-none">TAXI</span>
           </div>
         </Link>
 
