@@ -5,6 +5,13 @@ const QRCode = require('qrcode');
 const prisma = new PrismaClient();
 
 async function main() {
+  console.log('Checking database state...');
+  const userCount = await prisma.user.count();
+  if (userCount > 0) {
+    console.log(`Database already has ${userCount} users. Skipping seed.`);
+    return;
+  }
+
   console.log('Seeding paragliding community database...');
 
   // Clean existing tables
