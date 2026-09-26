@@ -66,12 +66,12 @@ export default function ClientShell({ children }: { children: React.ReactNode })
 
   return (
     <AuthContext.Provider value={{ user, loading, refreshUser: fetchUser, logout }}>
-      <div className="w-full max-w-md min-h-screen bg-slate-900 border-x border-slate-800 shadow-2xl flex flex-col relative">
+      <div className="w-full max-w-md min-h-screen bg-slate-900 border-x border-slate-800 shadow-2xl flex flex-col relative overflow-x-hidden">
         {!isPrintPermit && (
           <TopHeader user={user} onLogout={logout} unreadCount={unreadCount} />
         )}
 
-        <main className={`flex-1 flex flex-col ${isPrintPermit ? 'p-0' : 'pb-20'}`}>
+        <main className={`flex-1 flex flex-col w-full max-w-full overflow-x-hidden ${isPrintPermit ? 'p-0' : 'pb-20'}`}>
           {children}
         </main>
 

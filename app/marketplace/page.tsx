@@ -163,9 +163,9 @@ export default function MarketplacePage() {
     : listings;
 
   return (
-    <div className="flex-1 flex flex-col p-4 space-y-5">
+    <div className="flex-1 flex flex-col p-3.5 sm:p-4 space-y-5 w-full max-w-full overflow-x-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <div>
           <h1 className="text-2xl font-black text-white flex items-center gap-2">
             <ShoppingBag className="w-6 h-6 text-amber-400" />

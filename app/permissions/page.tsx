@@ -174,7 +174,7 @@ export default function PermissionsPage() {
     }));
 
   return (
-    <div className="flex-1 flex flex-col p-4 space-y-5">
+    <div className="flex-1 flex flex-col p-3.5 sm:p-4 space-y-5 w-full max-w-full overflow-x-hidden">
       {/* Header */}
       <div>
         <div className="flex items-center gap-2">

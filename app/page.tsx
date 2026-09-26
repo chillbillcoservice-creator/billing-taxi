@@ -109,10 +109,10 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col p-4 space-y-6">
+    <div className="flex-1 flex flex-col p-3.5 sm:p-4 space-y-5 sm:space-y-6 w-full max-w-full overflow-x-hidden">
       {/* Mountain Flight Telemetry Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-sky-950 via-slate-900 to-slate-950 p-5 border border-sky-800/60 shadow-2xl">
-        <div className="absolute -right-6 -bottom-8 opacity-10 pointer-events-none">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-sky-950 via-slate-900 to-slate-950 p-4 sm:p-5 border border-sky-800/60 shadow-2xl w-full max-w-full">
+        <div className="absolute -right-6 -bottom-8 opacity-10 pointer-events-none select-none">
           <Compass className="w-52 h-52 text-sky-400" />
         </div>
 
@@ -121,7 +121,7 @@ export default function HomePage() {
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
             Bir-Billing Launch Telemetry
           </span>
-          <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold border border-emerald-500/40 shadow-sm">
+          <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold border border-emerald-500/40 shadow-sm shrink-0">
             FLYABLE 🟢
           </span>
         </div>
@@ -129,32 +129,32 @@ export default function HomePage() {
         <h1 className="text-2xl sm:text-3xl font-black text-white leading-tight mb-1.5">
           Shared Mountain Taxis
         </h1>
-        <p className="text-sm text-sky-200/90 leading-relaxed mb-4">
+        <p className="text-xs sm:text-sm text-sky-200/90 leading-relaxed mb-4">
           Bir Landing Site (1,525m) → Billing Take-Off (2,430m). Book an open seat or share your vehicle.
         </p>
 
         {/* Live Weather Metrics */}
-        <div className="grid grid-cols-3 gap-2.5 text-center bg-slate-950/75 rounded-2xl p-3 border border-sky-900/60 backdrop-blur-md">
-          <div className="flex flex-col items-center">
-            <span className="text-xs text-slate-300 font-bold tracking-wider mb-1 flex items-center gap-1">
-              <Wind className="w-3.5 h-3.5 text-sky-400" /> WIND
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5 text-center bg-slate-950/75 rounded-2xl p-2.5 sm:p-3 border border-sky-900/60 backdrop-blur-md w-full">
+          <div className="flex flex-col items-center min-w-0">
+            <span className="text-[10px] sm:text-xs text-slate-300 font-bold tracking-wider mb-0.5 sm:mb-1 flex items-center gap-1">
+              <Wind className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-sky-400 shrink-0" /> WIND
             </span>
-            <span className="text-sm sm:text-base font-black text-sky-300">12-14 km/h</span>
-            <span className="text-[11px] text-slate-400 font-semibold">SW Breeze</span>
+            <span className="text-xs sm:text-base font-black text-sky-300 truncate w-full">12-14 km/h</span>
+            <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate w-full">SW Breeze</span>
           </div>
-          <div className="border-x border-slate-800 flex flex-col items-center">
-            <span className="text-xs text-slate-300 font-bold tracking-wider mb-1 flex items-center gap-1">
-              <Cloud className="w-3.5 h-3.5 text-amber-400" /> CLOUDBASE
+          <div className="border-x border-slate-800 flex flex-col items-center min-w-0 px-1">
+            <span className="text-[10px] sm:text-xs text-slate-300 font-bold tracking-wider mb-0.5 sm:mb-1 flex items-center gap-1">
+              <Cloud className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400 shrink-0" /> BASE
             </span>
-            <span className="text-sm sm:text-base font-black text-amber-400">3,800m</span>
-            <span className="text-[11px] text-slate-400 font-semibold">High Ceiling</span>
+            <span className="text-xs sm:text-base font-black text-amber-400 truncate w-full">3,800m</span>
+            <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate w-full">High Ceiling</span>
           </div>
-          <div className="flex flex-col items-center">
-            <span className="text-xs text-slate-300 font-bold tracking-wider mb-1 flex items-center gap-1">
-              <Sun className="w-3.5 h-3.5 text-emerald-400" /> TEMP
+          <div className="flex flex-col items-center min-w-0">
+            <span className="text-[10px] sm:text-xs text-slate-300 font-bold tracking-wider mb-0.5 sm:mb-1 flex items-center gap-1">
+              <Sun className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400 shrink-0" /> TEMP
             </span>
-            <span className="text-sm sm:text-base font-black text-emerald-400">18°C</span>
-            <span className="text-[11px] text-slate-400 font-semibold">Sunny & Clear</span>
+            <span className="text-xs sm:text-base font-black text-emerald-400 truncate w-full">18°C</span>
+            <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate w-full">Sunny</span>
           </div>
         </div>
       </div>
@@ -162,7 +162,7 @@ export default function HomePage() {
       {/* Feedback Alert Toast */}
       {feedbackMsg && (
         <div
-          className={`p-3.5 rounded-2xl text-sm font-semibold flex items-center gap-2.5 shadow-lg ${
+          className={`p-3.5 rounded-2xl text-sm font-semibold flex items-center gap-2.5 shadow-lg w-full max-w-full ${
             feedbackMsg.type === 'success'
               ? 'bg-emerald-950/90 text-emerald-200 border border-emerald-800'
               : 'bg-rose-950/90 text-rose-200 border border-rose-800'
@@ -173,81 +173,81 @@ export default function HomePage() {
           ) : (
             <AlertTriangle className="w-5 h-5 shrink-0 text-rose-400" />
           )}
-          <span>{feedbackMsg.text}</span>
+          <span className="truncate">{feedbackMsg.text}</span>
         </div>
       )}
 
-      {/* Main Module Navigation Quick Cards */}
-      <div className="grid grid-cols-5 gap-2 sm:gap-3">
+      {/* Main Module Navigation Quick Cards - strictly responsive without overflow */}
+      <div className="grid grid-cols-5 gap-1.5 sm:gap-2.5 w-full max-w-full">
         <Link
           href="/taxis"
-          className="flex flex-col items-center justify-center p-3 rounded-2xl bg-sky-950/80 border border-sky-800/80 hover:border-sky-500 hover:bg-sky-900/50 transition-all text-center group active:scale-95 shadow-md"
+          className="flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-2xl bg-sky-950/80 border border-sky-800/80 hover:border-sky-500 hover:bg-sky-900/50 transition-all text-center group active:scale-95 shadow-md min-w-0"
         >
-          <div className="w-11 h-11 rounded-2xl bg-sky-500/20 text-sky-400 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform shadow-inner">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-sky-500/20 text-sky-400 flex items-center justify-center mb-1 group-hover:scale-105 transition-transform shadow-inner shrink-0">
             <Car className="w-5 h-5" />
           </div>
-          <span className="text-xs font-bold text-slate-100">Taxis</span>
+          <span className="text-[11px] sm:text-xs font-bold text-slate-100 truncate w-full text-center">Taxis</span>
         </Link>
 
         <Link
           href="/chat"
-          className="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group active:scale-95 shadow-md"
+          className="flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group active:scale-95 shadow-md min-w-0"
         >
-          <div className="w-11 h-11 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform shadow-inner">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-1 group-hover:scale-105 transition-transform shadow-inner shrink-0">
             <MessageSquare className="w-5 h-5" />
           </div>
-          <span className="text-xs font-bold text-slate-100">Chat</span>
+          <span className="text-[11px] sm:text-xs font-bold text-slate-100 truncate w-full text-center">Chat</span>
         </Link>
 
         <Link
           href="/lost-found"
-          className="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group active:scale-95 shadow-md"
+          className="flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group active:scale-95 shadow-md min-w-0"
         >
-          <div className="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform shadow-inner">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-1 group-hover:scale-105 transition-transform shadow-inner shrink-0">
             <Search className="w-5 h-5" />
           </div>
-          <span className="text-xs font-bold text-slate-100">Lost/Found</span>
+          <span className="text-[11px] sm:text-xs font-bold text-slate-100 truncate w-full text-center">Lost/Found</span>
         </Link>
 
         <Link
           href="/marketplace"
-          className="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group active:scale-95 shadow-md"
+          className="flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group active:scale-95 shadow-md min-w-0"
         >
-          <div className="w-11 h-11 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform shadow-inner">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-1 group-hover:scale-105 transition-transform shadow-inner shrink-0">
             <ShoppingBag className="w-5 h-5" />
           </div>
-          <span className="text-xs font-bold text-slate-100">Market</span>
+          <span className="text-[11px] sm:text-xs font-bold text-slate-100 truncate w-full text-center">Market</span>
         </Link>
 
         <Link
           href="/permissions"
-          className="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group active:scale-95 shadow-md"
+          className="flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-sky-500 hover:bg-slate-850 transition-all text-center group active:scale-95 shadow-md min-w-0"
         >
-          <div className="w-11 h-11 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform shadow-inner">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center mb-1 group-hover:scale-105 transition-transform shadow-inner shrink-0">
             <Award className="w-5 h-5" />
           </div>
-          <span className="text-xs font-bold text-slate-100">Permits</span>
+          <span className="text-[11px] sm:text-xs font-bold text-slate-100 truncate w-full text-center">Permits</span>
         </Link>
       </div>
 
       {/* Section Header: TODAY'S BILLING TAXIS */}
-      <div className="space-y-3.5">
-        <div className="flex items-center justify-between">
-          <div>
+      <div className="space-y-3.5 w-full max-w-full">
+        <div className="flex items-center justify-between gap-2">
+          <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h2 className="text-lg sm:text-xl font-black text-white tracking-tight">
+              <h2 className="text-base sm:text-xl font-black text-white tracking-tight truncate">
                 TODAY'S BILLING TAXIS
               </h2>
-              <span className="px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-xs font-extrabold border border-sky-500/30">
+              <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-xs font-extrabold border border-sky-500/30 shrink-0">
                 {trips.length}
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-400 font-medium">Available rides departing today</p>
+            <p className="text-xs text-slate-400 font-medium truncate">Available rides departing today</p>
           </div>
 
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/25 active:scale-95 transition-all"
+            className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm shadow-lg shadow-amber-500/25 active:scale-95 transition-all shrink-0"
           >
             <Plus className="w-4 h-4 stroke-[3px]" />
             <span>Create Taxi</span>
@@ -255,13 +255,13 @@ export default function HomePage() {
         </div>
 
         {/* Clean, Non-Overflowing Responsive Filters */}
-        <div className="grid grid-cols-[1fr_1fr_auto] gap-2 items-center">
-          <div className="flex items-center gap-2 bg-slate-850/90 border border-slate-750 rounded-2xl px-3 h-12 shadow-sm">
+        <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] gap-2 items-center w-full max-w-full">
+          <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-850/90 border border-slate-750 rounded-2xl px-2.5 sm:px-3 h-12 shadow-sm min-w-0">
             <Filter className="w-4 h-4 text-sky-400 shrink-0" />
             <select
               value={filterLocation}
               onChange={(e) => setFilterLocation(e.target.value)}
-              className="w-full bg-transparent text-slate-100 focus:outline-none text-sm font-semibold truncate cursor-pointer"
+              className="w-full min-w-0 bg-transparent text-slate-100 focus:outline-none text-xs sm:text-sm font-semibold truncate cursor-pointer"
             >
               <option value="ALL" className="bg-slate-900 text-white">All Pickup Spots</option>
               {PICKUP_LOCATIONS.map((loc) => (
@@ -272,11 +272,11 @@ export default function HomePage() {
             </select>
           </div>
 
-          <div className="flex items-center bg-slate-850/90 border border-slate-750 rounded-2xl px-3 h-12 shadow-sm">
+          <div className="flex items-center bg-slate-850/90 border border-slate-750 rounded-2xl px-2.5 sm:px-3 h-12 shadow-sm min-w-0">
             <select
               value={filterSeats}
               onChange={(e) => setFilterSeats(e.target.value)}
-              className="w-full bg-transparent text-slate-100 focus:outline-none text-sm font-semibold truncate cursor-pointer"
+              className="w-full min-w-0 bg-transparent text-slate-100 focus:outline-none text-xs sm:text-sm font-semibold truncate cursor-pointer"
             >
               <option value="" className="bg-slate-900 text-white">Any Seats</option>
               <option value="1" className="bg-slate-900 text-white">1+ Seats Open</option>

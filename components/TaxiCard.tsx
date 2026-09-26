@@ -79,15 +79,15 @@ export default function TaxiCard({
   });
 
   return (
-    <div className="bg-slate-900/95 border border-slate-800 hover:border-slate-700/80 rounded-3xl p-4 sm:p-5 shadow-xl transition-all">
+    <div className="bg-slate-900/95 border border-slate-800 hover:border-slate-700/80 rounded-3xl p-4 sm:p-5 shadow-xl transition-all w-full max-w-full overflow-hidden">
       {/* Header: Time, Date & Status */}
-      <div className="flex items-center justify-between gap-2 mb-3.5">
-        <div className="flex items-center gap-2.5">
-          <div className="flex items-center gap-1.5 bg-sky-950 border border-sky-800/90 px-3 py-1.5 rounded-2xl text-sky-200 font-black text-sm sm:text-base">
-            <Clock className="w-4 h-4 text-sky-400" />
+      <div className="flex items-center justify-between gap-2 mb-3.5 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+          <div className="flex items-center gap-1.5 bg-sky-950 border border-sky-800/90 px-2.5 sm:px-3 py-1.5 rounded-2xl text-sky-200 font-black text-xs sm:text-base shrink-0">
+            <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-sky-400" />
             <span>{trip.pickupTime}</span>
           </div>
-          <span className="text-sm text-slate-300 font-semibold">{tripDateStr}</span>
+          <span className="text-xs sm:text-sm text-slate-300 font-semibold truncate">{tripDateStr}</span>
         </div>
         {getStatusBadge()}
       </div>
@@ -196,7 +196,7 @@ export default function TaxiCard({
         </a>
 
         {/* Join / Leave / Manage buttons */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           {hasBooked ? (
             <button
               onClick={() => onLeaveClick(trip.id)}

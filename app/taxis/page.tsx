@@ -87,22 +87,22 @@ export default function TaxisPage() {
     : trips;
 
   return (
-    <div className="flex-1 flex flex-col p-4 space-y-5">
+    <div className="flex-1 flex flex-col p-3.5 sm:p-4 space-y-5 w-full max-w-full overflow-x-hidden">
       {/* Top Banner */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-black text-white flex items-center gap-2">
-            <Car className="w-6 h-6 text-amber-400" />
+      <div className="flex items-center justify-between gap-2">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 truncate">
+            <Car className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400 shrink-0" />
             <span>Taxi Sharing Hub</span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 font-medium">
+          <p className="text-xs sm:text-sm text-slate-400 font-medium truncate">
             Bir Landing Ground ↔ Billing Launch (2,430m)
           </p>
         </div>
 
         <button
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/25 active:scale-95 transition-all"
+          className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm shadow-lg shadow-amber-500/25 active:scale-95 transition-all shrink-0"
         >
           <Plus className="w-4 h-4 stroke-[3px]" />
           <span>Host Ride</span>
@@ -112,7 +112,7 @@ export default function TaxisPage() {
       {/* Toast */}
       {toast && (
         <div
-          className={`p-3.5 rounded-2xl text-sm font-semibold flex items-center gap-2.5 shadow-lg ${
+          className={`p-3.5 rounded-2xl text-sm font-semibold flex items-center gap-2.5 shadow-lg w-full ${
             toast.type === 'success'
               ? 'bg-emerald-950 text-emerald-200 border border-emerald-800'
               : 'bg-rose-950 text-rose-200 border border-rose-800'
@@ -123,15 +123,15 @@ export default function TaxisPage() {
           ) : (
             <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
           )}
-          <span>{toast.text}</span>
+          <span className="truncate">{toast.text}</span>
         </div>
       )}
 
       {/* Segmented Tab */}
-      <div className="flex p-1.5 bg-slate-950 rounded-2xl border border-slate-800 shadow-inner">
+      <div className="flex p-1.5 bg-slate-950 rounded-2xl border border-slate-800 shadow-inner w-full">
         <button
           onClick={() => setActiveTab('ALL')}
-          className={`flex-1 py-2.5 text-sm font-black rounded-xl transition-all ${
+          className={`flex-1 py-2 sm:py-2.5 text-xs sm:text-sm font-black rounded-xl transition-all truncate ${
             activeTab === 'ALL'
               ? 'bg-sky-600 text-white shadow-md'
               : 'text-slate-400 hover:text-slate-200'
@@ -141,7 +141,7 @@ export default function TaxisPage() {
         </button>
         <button
           onClick={() => setActiveTab('MY_RIDES')}
-          className={`flex-1 py-2.5 text-sm font-black rounded-xl transition-all ${
+          className={`flex-1 py-2 sm:py-2.5 text-xs sm:text-sm font-black rounded-xl transition-all truncate ${
             activeTab === 'MY_RIDES'
               ? 'bg-sky-600 text-white shadow-md'
               : 'text-slate-400 hover:text-slate-200'
@@ -152,29 +152,29 @@ export default function TaxisPage() {
       </div>
 
       {/* Filter Controls */}
-      <div className="grid grid-cols-3 gap-2.5 text-sm">
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5 text-xs sm:text-sm w-full max-w-full">
         {/* Date Filter */}
-        <div className="bg-slate-850/90 p-2.5 rounded-2xl border border-slate-750 shadow-sm">
-          <span className="text-xs text-slate-400 block font-bold mb-1 uppercase tracking-wider">DATE</span>
+        <div className="bg-slate-850/90 p-2 sm:p-2.5 rounded-2xl border border-slate-750 shadow-sm min-w-0">
+          <span className="text-[10px] sm:text-xs text-slate-400 block font-bold mb-0.5 sm:mb-1 uppercase tracking-wider">DATE</span>
           <select
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value as any)}
-            className="w-full bg-transparent text-slate-100 focus:outline-none text-sm font-semibold cursor-pointer"
+            className="w-full min-w-0 bg-transparent text-slate-100 focus:outline-none text-xs sm:text-sm font-semibold cursor-pointer truncate"
           >
-            <option value="today" className="bg-slate-900 text-white">Today Only</option>
-            <option value="all" className="bg-slate-900 text-white">All Dates</option>
+            <option value="today" className="bg-slate-900 text-white">Today</option>
+            <option value="all" className="bg-slate-900 text-white">All</option>
           </select>
         </div>
 
         {/* Pickup Filter */}
-        <div className="bg-slate-850/90 p-2.5 rounded-2xl border border-slate-750 shadow-sm">
-          <span className="text-xs text-slate-400 block font-bold mb-1 uppercase tracking-wider">PICKUP</span>
+        <div className="bg-slate-850/90 p-2 sm:p-2.5 rounded-2xl border border-slate-750 shadow-sm min-w-0">
+          <span className="text-[10px] sm:text-xs text-slate-400 block font-bold mb-0.5 sm:mb-1 uppercase tracking-wider">PICKUP</span>
           <select
             value={pickupFilter}
             onChange={(e) => setPickupFilter(e.target.value)}
-            className="w-full bg-transparent text-slate-100 focus:outline-none text-sm font-semibold truncate cursor-pointer"
+            className="w-full min-w-0 bg-transparent text-slate-100 focus:outline-none text-xs sm:text-sm font-semibold truncate cursor-pointer"
           >
-            <option value="ALL" className="bg-slate-900 text-white">All Spots</option>
+            <option value="ALL" className="bg-slate-900 text-white">All</option>
             {PICKUP_LOCATIONS.map((loc) => (
               <option key={loc} value={loc} className="bg-slate-900 text-white">
                 {loc.split('(')[0].trim()}
@@ -184,18 +184,18 @@ export default function TaxisPage() {
         </div>
 
         {/* Status Filter */}
-        <div className="bg-slate-850/90 p-2.5 rounded-2xl border border-slate-750 shadow-sm">
-          <span className="text-xs text-slate-400 block font-bold mb-1 uppercase tracking-wider">STATUS</span>
+        <div className="bg-slate-850/90 p-2 sm:p-2.5 rounded-2xl border border-slate-750 shadow-sm min-w-0">
+          <span className="text-[10px] sm:text-xs text-slate-400 block font-bold mb-0.5 sm:mb-1 uppercase tracking-wider">STATUS</span>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full bg-transparent text-slate-100 focus:outline-none text-sm font-semibold cursor-pointer"
+            className="w-full min-w-0 bg-transparent text-slate-100 focus:outline-none text-xs sm:text-sm font-semibold cursor-pointer truncate"
           >
-            <option value="ALL" className="bg-slate-900 text-white">All Status</option>
+            <option value="ALL" className="bg-slate-900 text-white">All</option>
             <option value="OPEN" className="bg-slate-900 text-white">Open</option>
-            <option value="ALMOST_FULL" className="bg-slate-900 text-white">Almost Full</option>
+            <option value="ALMOST_FULL" className="bg-slate-900 text-white">Almost</option>
             <option value="FULL" className="bg-slate-900 text-white">Full</option>
-            <option value="COMPLETED" className="bg-slate-900 text-white">Completed</option>
+            <option value="COMPLETED" className="bg-slate-900 text-white">Done</option>
           </select>
         </div>
       </div>
