@@ -20,9 +20,9 @@ export default function TopHeader({ user, onLogout, unreadCount = 0 }: TopHeader
           <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-sky-600 to-amber-500 flex items-center justify-center shadow-lg shadow-sky-500/25 group-hover:scale-105 transition-transform shrink-0">
             <Compass className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </div>
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <span className="font-black text-lg sm:text-xl tracking-tight text-white leading-none">BILLING</span>
-            <span className="text-[11px] sm:text-xs px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 font-black border border-amber-500/40 tracking-wider leading-none">TAXI</span>
+          <div className="flex flex-col justify-center">
+            <span className="font-black text-base sm:text-lg tracking-wider text-white leading-none">BILLING</span>
+            <span className="text-[10px] sm:text-[11px] font-black tracking-[0.25em] text-amber-400 uppercase leading-none mt-1">TAXI</span>
           </div>
         </Link>
 
