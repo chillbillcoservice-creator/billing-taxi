@@ -228,15 +228,15 @@ export default function LostFoundPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search lost walkie, vario, GoPro, harness..."
-            className="w-full min-h-[48px] bg-slate-850/90 border border-slate-750 rounded-2xl pl-11 pr-4 py-3 text-base text-white placeholder-slate-400 focus:outline-none focus:border-sky-500 shadow-sm"
+            className="w-full min-h-[48px] bg-slate-900 border border-slate-700/80 rounded-2xl pl-11 pr-4 py-3 text-base text-white placeholder-slate-400 focus:outline-none focus:border-sky-500 shadow-sm"
           />
         </div>
 
-        <div className="flex gap-2.5 text-sm">
+        <div className="grid grid-cols-2 gap-2 text-sm w-full">
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="flex-1 min-h-[46px] bg-slate-850/90 border border-slate-750 rounded-2xl px-3.5 py-2.5 text-sm font-semibold text-slate-100 focus:outline-none cursor-pointer shadow-sm"
+            className="w-full min-w-0 min-h-[46px] bg-slate-900 border border-slate-700/80 rounded-2xl px-3 py-2.5 text-sm font-semibold text-slate-100 focus:outline-none cursor-pointer shadow-sm"
           >
             <option value="ALL" className="bg-slate-900 text-white">All Categories</option>
             {LOST_FOUND_CATEGORIES.map((cat) => (
@@ -249,7 +249,7 @@ export default function LostFoundPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="min-h-[46px] bg-slate-850/90 border border-slate-750 rounded-2xl px-3.5 py-2.5 text-sm font-semibold text-slate-100 focus:outline-none cursor-pointer shadow-sm"
+            className="w-full min-w-0 min-h-[46px] bg-slate-900 border border-slate-700/80 rounded-2xl px-3 py-2.5 text-sm font-semibold text-slate-100 focus:outline-none cursor-pointer shadow-sm"
           >
             <option value="ALL" className="bg-slate-900 text-white">All Status</option>
             <option value="OPEN" className="bg-slate-900 text-white">Open Only</option>

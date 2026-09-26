@@ -30,7 +30,11 @@ module.exports = {
           amber: '#f59e0b',
           emerald: '#10b981',
           rose: '#f43f5e',
-        }
+        },
+        slate: {
+          750: '#233044',
+          850: '#141e30',
+        },
       },
     },
   },

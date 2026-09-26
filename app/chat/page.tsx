@@ -19,6 +19,226 @@ import {
   Camera,
 } from 'lucide-react';
 
+interface SwipeableMessageRowProps {
+  msg: ChatMessageInfo;
+  isMe: boolean;
+  timeStr: string;
+  isStaff: boolean;
+  onReply: (msg: ChatMessageInfo) => void;
+  onReport: (msg: ChatMessageInfo) => void;
+  onPin: (msgId: string) => void;
+  onDelete: (msgId: string) => void;
+}
+
+function SwipeableMessageRow({
+  msg,
+  isMe,
+  timeStr,
+  isStaff,
+  onReply,
+  onReport,
+  onPin,
+  onDelete,
+}: SwipeableMessageRowProps) {
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
+  const startXRef = useRef<number | null>(null);
+  const startYRef = useRef<number | null>(null);
+  const isHorizontalGestureRef = useRef<boolean | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    startXRef.current = e.touches[0].clientX;
+    startYRef.current = e.touches[0].clientY;
+    isHorizontalGestureRef.current = null;
+    setIsSwiping(false);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (startXRef.current === null || startYRef.current === null) return;
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const diffX = currentX - startXRef.current;
+    const diffY = currentY - startYRef.current;
+
+    // Check gesture direction
+    if (isHorizontalGestureRef.current === null) {
+      if (Math.abs(diffX) > 8 || Math.abs(diffY) > 8) {
+        isHorizontalGestureRef.current = Math.abs(diffX) > Math.abs(diffY);
+      }
+    }
+
+    // Only handle horizontal right-swipe
+    if (isHorizontalGestureRef.current && diffX > 0) {
+      setIsSwiping(true);
+      const clamped = Math.min(diffX * 0.55, 65);
+      setDragOffset(clamped);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (dragOffset >= 40) {
+      if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        navigator.vibrate(25);
+      }
+      onReply(msg);
+    }
+    setDragOffset(0);
+    setIsSwiping(false);
+    startXRef.current = null;
+    startYRef.current = null;
+    isHorizontalGestureRef.current = null;
+  };
+
+  const thresholdReached = dragOffset >= 40;
+
+  return (
+    <div className={`relative flex flex-col ${isMe ? 'items-end' : 'items-start'} group w-full select-none touch-pan-y`}>
+      {/* Sender Tag */}
+      {!isMe && (
+        <div className="flex items-center gap-1 mb-1 ml-1 text-[11px]">
+          <span className="font-bold text-slate-300">{msg.sender.name}</span>
+          <span className="text-[10px] text-slate-500">@{msg.sender.username}</span>
+          {msg.sender.role === 'ADMIN' && (
+            <span className="px-1 rounded bg-amber-500/20 text-amber-300 text-[9px] font-bold">
+              ADMIN
+            </span>
+          )}
+          {msg.sender.role === 'MODERATOR' && (
+            <span className="px-1 rounded bg-sky-500/20 text-sky-300 text-[9px] font-bold">
+              MARSHAL
+            </span>
+          )}
+          {msg.sender.isPilotVerified && (
+            <ShieldCheck className="w-3 h-3 text-sky-400" />
+          )}
+        </div>
+      )}
+
+      {/* Replying To preview */}
+      {msg.replyTo && (
+        <div
+          className={`text-[10px] px-2.5 py-1 mb-1 rounded-lg border max-w-xs truncate ${
+            isMe
+              ? 'bg-sky-950/60 text-sky-300 border-sky-900'
+              : 'bg-slate-950/60 text-slate-400 border-slate-800'
+          }`}
+        >
+          <span className="font-semibold text-slate-300">
+            Replying to {msg.replyTo.sender.name}:
+          </span>{' '}
+          {msg.replyTo.content}
+        </div>
+      )}
+
+      {/* Swipe Container */}
+      <div className="relative w-full flex items-center">
+        {/* Swipe Reveal Reply Icon (WhatsApp style) */}
+        <div
+          className={`absolute left-1 z-0 flex items-center justify-center w-8 h-8 rounded-full border transition-all duration-150 pointer-events-none ${
+            dragOffset > 10 ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+          } ${
+            thresholdReached
+              ? 'bg-sky-500 text-white border-sky-400 scale-110 shadow-lg shadow-sky-500/50'
+              : 'bg-sky-600/30 border-sky-500/40 text-sky-300'
+          }`}
+        >
+          <Reply className="w-4 h-4" />
+        </div>
+
+        {/* Message Bubble */}
+        <div
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
+          style={{
+            transform: `translateX(${dragOffset}px)`,
+            transition: isSwiping ? 'none' : 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)',
+          }}
+          className={`relative max-w-[85%] rounded-2xl px-3.5 py-2 text-xs shadow-sm z-10 ${
+            isMe
+              ? 'ml-auto bg-sky-600 text-white rounded-tr-none'
+              : 'bg-slate-800 border border-slate-700/80 text-slate-100 rounded-tl-none'
+          }`}
+        >
+          {/* Photo or Video Media */}
+          {msg.mediaUrl && (
+            <div className="mb-2 rounded-xl overflow-hidden max-h-56 bg-black/40">
+              {msg.mediaType === 'VIDEO' ? (
+                <video src={msg.mediaUrl} controls className="w-full max-h-56 object-cover" />
+              ) : (
+                <img
+                  src={msg.mediaUrl}
+                  alt="Attachment"
+                  className="w-full max-h-56 object-cover rounded-xl"
+                />
+              )}
+            </div>
+          )}
+
+          {/* Text Content */}
+          <p className="whitespace-pre-wrap break-words leading-relaxed text-sm">
+            {msg.content}
+          </p>
+
+          {/* Timestamp & Pin Indicator */}
+          <div className="flex items-center justify-end gap-1.5 mt-1 text-[10px] opacity-75">
+            {msg.isPinned && <Pin className="w-3 h-3 text-amber-300 fill-amber-300" />}
+            <span>{timeStr}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Action Buttons (Reply, Report, Pin, Delete) */}
+      <div className={`flex items-center gap-2 mt-1 px-1 text-[11px] text-slate-500 ${isMe ? 'mr-1' : 'ml-1'}`}>
+        <button
+          onClick={() => onReply(msg)}
+          className="hover:text-sky-400 flex items-center gap-0.5 py-0.5 px-1 rounded hover:bg-slate-800"
+          title="Reply (or swipe right)"
+        >
+          <Reply className="w-3 h-3" />
+          <span>Reply</span>
+        </button>
+
+        {!isMe && (
+          <button
+            onClick={() => onReport(msg)}
+            className="hover:text-amber-400 flex items-center gap-0.5 py-0.5 px-1 rounded hover:bg-slate-800"
+            title="Report"
+          >
+            <Flag className="w-3 h-3" />
+            <span>Report</span>
+          </button>
+        )}
+
+        {isStaff && (
+          <button
+            onClick={() => onPin(msg.id)}
+            className={`hover:text-amber-400 flex items-center gap-0.5 py-0.5 px-1 rounded hover:bg-slate-800 ${
+              msg.isPinned ? 'text-amber-400' : ''
+            }`}
+            title={msg.isPinned ? 'Unpin' : 'Pin to top'}
+          >
+            <Pin className="w-3 h-3" />
+            <span>{msg.isPinned ? 'Unpin' : 'Pin'}</span>
+          </button>
+        )}
+
+        {(isMe || isStaff) && (
+          <button
+            onClick={() => onDelete(msg.id)}
+            className="hover:text-rose-400 flex items-center gap-0.5 py-0.5 px-1 rounded hover:bg-slate-800"
+            title="Delete"
+          >
+            <Trash2 className="w-3 h-3" />
+            <span>Delete</span>
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function ChatPage() {
   const { user } = useAuth();
   const [messages, setMessages] = useState<ChatMessageInfo[]>([]);
@@ -35,6 +255,14 @@ export default function ChatPage() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const chatInputRef = useRef<HTMLInputElement>(null);
+
+  const handleReplyToMessage = (msg: ChatMessageInfo) => {
+    setReplyingTo(msg);
+    setTimeout(() => {
+      chatInputRef.current?.focus();
+    }, 50);
+  };
 
   const fetchMessages = async (isInitial = false) => {
     try {
@@ -226,129 +454,17 @@ export default function ChatPage() {
             });
 
             return (
-              <div
+              <SwipeableMessageRow
                 key={msg.id}
-                className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} group`}
-              >
-                {/* Sender Tag */}
-                {!isMe && (
-                  <div className="flex items-center gap-1 mb-1 ml-1 text-[11px]">
-                    <span className="font-bold text-slate-300">{msg.sender.name}</span>
-                    <span className="text-[10px] text-slate-500">@{msg.sender.username}</span>
-                    {msg.sender.role === 'ADMIN' && (
-                      <span className="px-1 rounded bg-amber-500/20 text-amber-300 text-[9px] font-bold">
-                        ADMIN
-                      </span>
-                    )}
-                    {msg.sender.role === 'MODERATOR' && (
-                      <span className="px-1 rounded bg-sky-500/20 text-sky-300 text-[9px] font-bold">
-                        MARSHAL
-                      </span>
-                    )}
-                    {msg.sender.isPilotVerified && (
-                      <ShieldCheck className="w-3 h-3 text-sky-400" />
-                    )}
-                  </div>
-                )}
-
-                {/* Replying To preview */}
-                {msg.replyTo && (
-                  <div
-                    className={`text-[10px] px-2.5 py-1 mb-1 rounded-lg border max-w-xs truncate ${
-                      isMe
-                        ? 'bg-sky-950/60 text-sky-300 border-sky-900'
-                        : 'bg-slate-950/60 text-slate-400 border-slate-800'
-                    }`}
-                  >
-                    <span className="font-semibold text-slate-300">
-                      Replying to {msg.replyTo.sender.name}:
-                    </span>{' '}
-                    {msg.replyTo.content}
-                  </div>
-                )}
-
-                {/* Message Bubble */}
-                <div
-                  className={`relative max-w-[85%] rounded-2xl px-3.5 py-2 text-xs shadow-sm ${
-                    isMe
-                      ? 'bg-sky-600 text-white rounded-tr-none'
-                      : 'bg-slate-800 border border-slate-700/80 text-slate-100 rounded-tl-none'
-                  }`}
-                >
-                  {/* Photo or Video Media */}
-                  {msg.mediaUrl && (
-                    <div className="mb-2 rounded-xl overflow-hidden max-h-56 bg-black/40">
-                      {msg.mediaType === 'VIDEO' ? (
-                        <video src={msg.mediaUrl} controls className="w-full max-h-56 object-cover" />
-                      ) : (
-                        <img
-                          src={msg.mediaUrl}
-                          alt="Attachment"
-                          className="w-full max-h-56 object-cover rounded-xl"
-                        />
-                      )}
-                    </div>
-                  )}
-
-                  {/* Text Content */}
-                  <p className="whitespace-pre-wrap break-words leading-relaxed text-sm">
-                    {msg.content}
-                  </p>
-
-                  {/* Timestamp & Pin Indicator */}
-                  <div className="flex items-center justify-end gap-1.5 mt-1 text-[10px] opacity-75">
-                    {msg.isPinned && <Pin className="w-3 h-3 text-amber-300 fill-amber-300" />}
-                    <span>{timeStr}</span>
-                  </div>
-                </div>
-
-                {/* Quick Action Buttons (Reply, Report, Pin, Delete) */}
-                <div className="flex items-center gap-2 mt-1 px-1 opacity-0 group-hover:opacity-100 transition-opacity text-[11px] text-slate-500">
-                  <button
-                    onClick={() => setReplyingTo(msg)}
-                    className="hover:text-sky-400 flex items-center gap-0.5"
-                    title="Reply"
-                  >
-                    <Reply className="w-3 h-3" />
-                    <span>Reply</span>
-                  </button>
-
-                  {!isMe && (
-                    <button
-                      onClick={() => setReportModalMessage(msg)}
-                      className="hover:text-amber-400 flex items-center gap-0.5"
-                      title="Report"
-                    >
-                      <Flag className="w-3 h-3" />
-                      <span>Report</span>
-                    </button>
-                  )}
-
-                  {isStaff && (
-                    <button
-                      onClick={() => handleTogglePin(msg.id)}
-                      className={`hover:text-amber-400 flex items-center gap-0.5 ${
-                        msg.isPinned ? 'text-amber-400' : ''
-                      }`}
-                      title={msg.isPinned ? 'Unpin' : 'Pin to top'}
-                    >
-                      <Pin className="w-3 h-3" />
-                      <span>{msg.isPinned ? 'Unpin' : 'Pin'}</span>
-                    </button>
-                  )}
-
-                  {(isMe || isStaff) && (
-                    <button
-                      onClick={() => handleDeleteMessage(msg.id)}
-                      className="hover:text-rose-400 flex items-center gap-0.5"
-                      title="Delete"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                      <span>Delete</span>
-                    </button>
-                  )}
-                </div>
-              </div>
+                msg={msg}
+                isMe={isMe}
+                timeStr={timeStr}
+                isStaff={isStaff}
+                onReply={handleReplyToMessage}
+                onReport={setReportModalMessage}
+                onPin={handleTogglePin}
+                onDelete={handleDeleteMessage}
+              />
             );
           })
         ) : (
@@ -390,7 +506,7 @@ export default function ChatPage() {
       {/* Input Bar */}
       <form
         onSubmit={handleSendMessage}
-        className="p-3 bg-slate-900/95 border-t border-slate-800 flex items-center gap-2.5 backdrop-blur-md"
+        className="px-3 py-2.5 bg-slate-900/95 border-t border-slate-800 flex items-center gap-2 backdrop-blur-md w-full max-w-full box-border"
       >
         <input
           type="file"
@@ -404,7 +520,7 @@ export default function ChatPage() {
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={uploading}
-          className="h-11 w-11 rounded-2xl bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-sky-400 transition-colors shrink-0 flex items-center justify-center active:scale-95"
+          className="h-10 w-10 sm:h-11 sm:w-11 rounded-2xl bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-300 hover:text-sky-400 transition-colors shrink-0 flex items-center justify-center active:scale-95"
           title="Attach photo / video from camera or gallery"
         >
           {uploading ? (
@@ -415,18 +531,19 @@ export default function ChatPage() {
         </button>
 
         <input
+          ref={chatInputRef}
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder={user ? "Write message... (@username)" : "Sign in to chat"}
           disabled={!user}
-          className="flex-1 min-h-[46px] bg-slate-800/90 border border-slate-700 rounded-2xl px-4 py-2.5 text-base text-white placeholder-slate-500 focus:outline-none focus:border-sky-500"
+          className="flex-1 min-w-0 min-h-[44px] bg-slate-800 border border-slate-700 rounded-2xl px-3.5 py-2 text-base text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 shadow-inner"
         />
 
         <button
           type="submit"
           disabled={sending || (!text.trim() && !attachedMedia) || !user}
-          className="h-11 w-11 rounded-2xl bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 text-white shadow-md shadow-sky-600/30 active:scale-95 transition-all shrink-0 flex items-center justify-center"
+          className="h-10 w-10 sm:h-11 sm:w-11 rounded-2xl bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 text-white shadow-md shadow-sky-600/30 active:scale-95 transition-all shrink-0 flex items-center justify-center"
         >
           <Send className="w-5 h-5" />
         </button>

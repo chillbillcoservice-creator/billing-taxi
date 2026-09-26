@@ -227,15 +227,15 @@ export default function MarketplacePage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search Gin, Ozone, Niviuk, Supair, Naviter..."
-            className="w-full min-h-[48px] bg-slate-850/90 border border-slate-750 rounded-2xl pl-11 pr-4 py-3 text-base text-white placeholder-slate-400 focus:outline-none focus:border-sky-500 shadow-sm"
+            className="w-full min-h-[48px] bg-slate-900 border border-slate-700/80 rounded-2xl pl-11 pr-4 py-3 text-base text-white placeholder-slate-400 focus:outline-none focus:border-sky-500 shadow-sm"
           />
         </div>
 
-        <div className="grid grid-cols-3 gap-2.5 text-sm">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5 text-xs sm:text-sm w-full">
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="min-h-[46px] bg-slate-850/90 border border-slate-750 rounded-2xl px-3 py-2.5 text-sm font-semibold text-slate-100 focus:outline-none cursor-pointer shadow-sm truncate"
+            className="w-full min-w-0 min-h-[46px] bg-slate-900 border border-slate-700/80 rounded-2xl px-2 sm:px-3 py-2.5 font-semibold text-slate-100 focus:outline-none cursor-pointer shadow-sm truncate"
           >
             <option value="ALL" className="bg-slate-900 text-white">All Gear</option>
             {GEAR_CATEGORIES.map((c) => (
@@ -248,7 +248,7 @@ export default function MarketplacePage() {
           <select
             value={conditionFilter}
             onChange={(e) => setConditionFilter(e.target.value)}
-            className="min-h-[46px] bg-slate-850/90 border border-slate-750 rounded-2xl px-3 py-2.5 text-sm font-semibold text-slate-100 focus:outline-none cursor-pointer shadow-sm"
+            className="w-full min-w-0 min-h-[46px] bg-slate-900 border border-slate-700/80 rounded-2xl px-2 sm:px-3 py-2.5 font-semibold text-slate-100 focus:outline-none cursor-pointer shadow-sm truncate"
           >
             <option value="ALL" className="bg-slate-900 text-white">Condition</option>
             <option value="NEW" className="bg-slate-900 text-white">New</option>
@@ -260,7 +260,7 @@ export default function MarketplacePage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="min-h-[46px] bg-slate-850/90 border border-slate-750 rounded-2xl px-3 py-2.5 text-sm font-semibold text-slate-100 focus:outline-none cursor-pointer shadow-sm"
+            className="w-full min-w-0 min-h-[46px] bg-slate-900 border border-slate-700/80 rounded-2xl px-2 sm:px-3 py-2.5 font-semibold text-slate-100 focus:outline-none cursor-pointer shadow-sm truncate"
           >
             <option value="ALL" className="bg-slate-900 text-white">Status</option>
             <option value="AVAILABLE" className="bg-slate-900 text-white">Available</option>
