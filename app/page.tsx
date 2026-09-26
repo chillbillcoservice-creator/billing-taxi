@@ -16,8 +16,6 @@ import {
   CheckCircle,
   AlertTriangle,
   RefreshCw,
-  Compass,
-  Cloud,
   Sun,
   Activity,
 } from 'lucide-react';
@@ -141,69 +139,83 @@ export default function HomePage() {
   return (
     <div className="flex-1 flex flex-col p-3.5 sm:p-4 space-y-5 sm:space-y-6 w-full max-w-full overflow-x-hidden">
       {/* Mountain Flight Telemetry Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-sky-950 via-slate-900 to-slate-950 p-4 sm:p-5 border border-sky-800/60 shadow-2xl w-full max-w-full">
-        <div className="absolute -right-6 -bottom-8 opacity-10 pointer-events-none select-none">
-          <Compass className="w-52 h-52 text-sky-400" />
+      <div className="rounded-3xl bg-slate-900 border border-slate-800 p-3.5 sm:p-4 shadow-xl w-full max-w-full space-y-2.5">
+        {/* Header: Live Beacon + Title + Refresh + Flyable Status Badge */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="relative flex h-2.5 w-2.5 shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+            <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-sky-400 truncate">
+              Bir-Billing Launch Telemetry
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={fetchWeather}
+              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              title="Refresh live telemetry"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+            </button>
+            <span
+              className={`text-[10px] sm:text-xs px-2.5 py-0.5 rounded-full font-black border tracking-wide transition-colors ${
+                weather?.statusColor === 'rose'
+                  ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+                  : weather?.statusColor === 'amber'
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                  : weather?.statusColor === 'sky'
+                  ? 'bg-sky-500/20 text-sky-300 border-sky-500/40'
+                  : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+              }`}
+            >
+              {weather ? weather.statusBadge : 'LIVE 🟢'}
+            </span>
+          </div>
         </div>
 
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <span className="text-xs font-extrabold uppercase tracking-wider text-sky-400 flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-            Bir-Billing Launch Telemetry
-          </span>
-          <span className={`text-xs px-2.5 py-1 rounded-full font-extrabold border shadow-sm shrink-0 transition-colors ${
-            weather?.statusColor === 'rose'
-              ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
-              : weather?.statusColor === 'amber'
-              ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-              : weather?.statusColor === 'sky'
-              ? 'bg-sky-500/20 text-sky-300 border-sky-500/40'
-              : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-          }`}>
-            {weather ? weather.statusBadge : 'LIVE DATA 🟢'}
-          </span>
-        </div>
-
-        <h1 className="text-2xl sm:text-3xl font-black text-white leading-tight mb-1.5">
-          Shared Mountain Taxis
-        </h1>
-        <p className="text-xs sm:text-sm text-sky-200/90 leading-relaxed mb-4">
+        {/* Route Subtitle */}
+        <p className="text-xs sm:text-sm text-slate-300 leading-snug">
           Bir Landing Site (1,525m) → Billing Take-Off (2,430m). Book an open seat or share your vehicle.
         </p>
 
-        {/* Live Weather Metrics */}
-        <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5 text-center bg-slate-950/75 rounded-2xl p-2.5 sm:p-3 border border-sky-900/60 backdrop-blur-md w-full">
+        {/* Live Weather Metrics Strip */}
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5 text-center bg-slate-950/80 rounded-2xl p-2 sm:p-2.5 border border-slate-800/80 w-full">
           <div className="flex flex-col items-center min-w-0">
-            <span className="text-[10px] sm:text-xs text-slate-300 font-bold tracking-wider mb-0.5 sm:mb-1 flex items-center gap-1">
-              <Wind className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-sky-400 shrink-0" /> WIND
+            <span className="text-[9px] sm:text-[10px] text-slate-400 font-extrabold tracking-wider mb-0.5 flex items-center gap-1">
+              <Wind className="w-3 h-3 text-sky-400 shrink-0" /> WIND
             </span>
-            <span className="text-xs sm:text-base font-black text-sky-300 truncate w-full">
+            <span className="text-xs sm:text-sm font-black text-sky-300 truncate w-full">
               {weather ? `${weather.windSpeed} km/h` : '...'}
             </span>
-            <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate w-full">
+            <span className="text-[9px] sm:text-[10px] text-slate-400 font-semibold truncate w-full">
               {weather ? `${weather.windDirection} (${weather.windDegrees}°)` : 'Live Wind'}
             </span>
           </div>
+
           <div className="border-x border-slate-800 flex flex-col items-center min-w-0 px-1">
-            <span className="text-[10px] sm:text-xs text-slate-300 font-bold tracking-wider mb-0.5 sm:mb-1 flex items-center gap-1">
-              <Activity className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400 shrink-0" /> GUSTS
+            <span className="text-[9px] sm:text-[10px] text-slate-400 font-extrabold tracking-wider mb-0.5 flex items-center gap-1">
+              <Activity className="w-3 h-3 text-amber-400 shrink-0" /> GUSTS
             </span>
-            <span className="text-xs sm:text-base font-black text-amber-400 truncate w-full">
+            <span className="text-xs sm:text-sm font-black text-amber-400 truncate w-full">
               {weather ? `${weather.windGusts} km/h` : '...'}
             </span>
-            <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate w-full">
-              {weather ? (weather.windGusts > 25 ? 'Strong Peak' : 'Peak Gust') : 'Mountain Peak'}
+            <span className="text-[9px] sm:text-[10px] text-slate-400 font-semibold truncate w-full">
+              {weather ? (weather.windGusts > 25 ? 'Strong Peak' : 'Peak Gust') : 'Peak'}
             </span>
           </div>
+
           <div className="flex flex-col items-center min-w-0">
-            <span className="text-[10px] sm:text-xs text-slate-300 font-bold tracking-wider mb-0.5 sm:mb-1 flex items-center gap-1">
-              <Sun className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400 shrink-0" /> TEMP
+            <span className="text-[9px] sm:text-[10px] text-slate-400 font-extrabold tracking-wider mb-0.5 flex items-center gap-1">
+              <Sun className="w-3 h-3 text-emerald-400 shrink-0" /> TAKEOFF TEMP
             </span>
-            <span className="text-xs sm:text-base font-black text-emerald-400 truncate w-full">
+            <span className="text-xs sm:text-sm font-black text-emerald-400 truncate w-full">
               {weather ? `${weather.temperature}°C` : '...'}
             </span>
-            <span className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate w-full">
-              {weather ? weather.condition : 'Billing 2,430m'}
+            <span className="text-[9px] sm:text-[10px] text-slate-400 font-semibold truncate w-full">
+              {weather ? weather.condition : '2,430m'}
             </span>
           </div>
         </div>
